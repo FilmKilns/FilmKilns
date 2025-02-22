@@ -2,6 +2,7 @@ package com.filmkilns.preauto.processor;
 
 import com.filmkilns.annotation.FkNativeAuto;
 import com.filmkilns.preauto.entity.CreationClass;
+import com.filmkilns.preauto.entity.CreationMethod;
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
 import com.sun.tools.javac.code.Symbol;
@@ -30,8 +31,6 @@ import javax.lang.model.element.TypeElement;
 @AutoService(Processor.class)
 public class FkNativeAutoProcessor extends FkAbsProcessor {
     private final static String TAG = "FkNativeAutoProcessor";
-    private final static Class<?>[] SIG_MAP_ID = {boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, void.class, String.class, Object.class};
-    private final static String[] SIG_MAP_V = {"Z", "B", "C", "S", "I", "J", "F", "D", "V", "Ljava/lang/String;", "Ljava/lang/Object;"};
     private VelocityEngine engine;
 
     @Override
@@ -39,7 +38,7 @@ public class FkNativeAutoProcessor extends FkAbsProcessor {
         super.init(processingEnvironment);
         logI(TAG, "init: projectDir=" + getProjectDir() + ", mainDir=" + getSourceMainDir());
         engine = new VelocityEngine();
-        engine.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, new File("/Volumes/FXS790_HD/Documents/Projects/AndroidStudioProjects/FilmKilns/proj/FkAndroid", "fkpreauto/src/main/resources/").getAbsolutePath());
+        engine.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, new File(getProjectDir(), "templates/").getAbsolutePath());
         engine.setProperty(RuntimeConstants.UBERSPECT_CLASSNAME, UberspectImpl.class.getName() + ", " + UberspectPublicFields.class.getName());
         engine.init();
     }
@@ -63,20 +62,25 @@ public class FkNativeAutoProcessor extends FkAbsProcessor {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-//        generateHeader(new File(dir,  item.name + ".h"));
+        generateHeader(item, new File(dir,  "Java_" + item.name + ".h"));
     }
 
     private Template createTemplate(String tempName) {
         return engine.getTemplate(tempName);
     }
 
-    private void generateHeader(File file) {
+    private void generateHeader(CreationClass item, File file) {
         if (file.exists()) {
             file.delete();
         }
+        List<CreationMethod.JMethodInfo> classMethods = new ArrayList<>();
+        for (CreationMethod it : item.methods) {
+            classMethods.add(new CreationMethod.JMethodInfo(it));
+        }
         VelocityContext ctx = new VelocityContext();
-//        ctx.put("classPackage", classPackage);
-//        ctx.put("$className", $className);
+        ctx.put("className", item.name);
+        ctx.put("classMethodCnt", item.methods.size());
+        ctx.put("classMethods", classMethods);
         try {
             FileWriter writer = new FileWriter(file);
             Template template = createTemplate("FkNativeInterface.temp");

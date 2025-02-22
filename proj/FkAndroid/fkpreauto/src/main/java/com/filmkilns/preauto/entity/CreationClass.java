@@ -5,6 +5,7 @@ import com.sun.tools.javac.code.Symbol;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CreationClass {
     public static class Type {
@@ -12,6 +13,13 @@ public class CreationClass {
         public String jniType;
         public String sig;
         public String cType;
+
+        public Type(Class<?> javaType, String jniType, String sig, String cType) {
+            this.javaType = javaType;
+            this.jniType = jniType;
+            this.sig = sig;
+            this.cType = cType;
+        }
     }
 
     public String name;
@@ -76,4 +84,19 @@ public class CreationClass {
             return Object.class;
         }
     }
+
+    public final static Map<Class<?>, Type> SIG_MAP = Map.ofEntries(
+            Map.entry(boolean.class, new Type(boolean.class, "jboolean", "Z", "bool")),
+            Map.entry(byte.class, new Type(byte.class, "jbyte", "B", "uint8_t")),
+            Map.entry(char.class, new Type(char.class, "jchar", "C", "char")),
+            Map.entry(short.class, new Type(short.class, "jshort", "S", "uint16_t")),
+            Map.entry(int.class, new Type(int.class, "jint", "I", "uint32_t")),
+            Map.entry(long.class, new Type(long.class, "jlong", "J", "uint64_t")),
+            Map.entry(float.class, new Type(float.class, "jfloat", "F", "float")),
+            Map.entry(double.class, new Type(double.class, "jdouble", "D", "double")),
+            Map.entry(void.class, new Type(void.class, "void", "V", "void")),
+            Map.entry(String.class, new Type(String.class, "jstring", "Ljava/lang/String;", "std::string")),
+            Map.entry(Object.class, new Type(Object.class, "jobject", "Ljava/lang/Object;", "std::any")),
+            Map.entry(byte[].class, new Type(byte[].class, "jbyteArray", "[B", "uint8_t[]"))
+    );
 }

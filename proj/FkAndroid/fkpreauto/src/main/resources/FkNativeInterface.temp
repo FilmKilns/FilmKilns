@@ -1,3 +1,0 @@
-package ${classPackage};
-public interface $className {
-}

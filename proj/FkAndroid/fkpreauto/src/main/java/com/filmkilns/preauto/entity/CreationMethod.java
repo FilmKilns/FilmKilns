@@ -26,4 +26,26 @@ public class CreationMethod {
                 ", args=" + args +
                 '}';
     }
+
+    public static class JMethodInfo {
+        public String name;
+        public String returnSig;
+        public String argsSig;
+
+        public JMethodInfo(CreationMethod method) {
+            this.name = method.name;
+            this.returnSig = CreationClass.SIG_MAP.get(method.returnType).jniType;
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < method.args.size(); ++i) {
+                CreationArg arg = method.args.get(i);
+                sb.append(CreationClass.SIG_MAP.get(arg.type).jniType);
+                sb.append(" ");
+                sb.append(arg.name);
+                if (i != method.args.size() - 1) {
+                    sb.append(", ");
+                }
+            }
+            this.argsSig = sb.toString();
+        }
+    }
 }

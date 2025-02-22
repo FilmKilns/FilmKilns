@@ -1,0 +1,21 @@
+//
+// Created by Alimin on 2025/2/19.
+//
+#pragma once
+\#include <jni.h>
+
+namespace Java_${className} {
+
+#foreach($method in ${classMethods})
+    ${method.returnSig} ${method.name}(JNIEnv *env, jclass cls, ${method.argsSig});
+
+#end
+    bool reg(JNIEnv *env);
+
+    extern const char *CLASS_NAME;
+
+    extern const int METHODS_NUM;
+
+    extern const JNINativeMethod METHODS[${classMethodCnt}];
+
+};

@@ -16,7 +16,6 @@ import com.alimin.fk.utils.FkLogcat;
 import java.util.ArrayList;
 import java.util.List;
 
-@FkNativeAuto(path = "cpp/native/source")
 public class FkSurfaceTextureSource2 extends FkAbsImageSource2 {
     private interface DoneCallback {
         void done(int arg0, long arg1, String arg2);
