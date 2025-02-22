@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:fk_flutter/fk/entity/FkImageLayer.pb.dart';
 import 'package:fk_flutter/fk/fk_image_engine.dart';
-import 'package:fk_flutter/utils/dialog_utils.dart';
 import 'package:fk_flutter/utils/system_utils.dart';
 import 'package:fk_flutter/fk/plugin/fk_image_hist_plugin.dart';
 
@@ -40,7 +39,7 @@ class _LayerListPageState extends State<LayerListPage> with WidgetsBindingObserv
 
   Widget createItem(FkImageLayer layer) {
     return Text("${layer.size.width}x${layer.size.height}",
-        style: TextStyle(color: Colors.black, fontSize: _ITEM_TEXT_SIZE));
+        style: const TextStyle(color: Colors.black, fontSize: _ITEM_TEXT_SIZE));
   }
 
   Widget wrapItem(Widget index, Widget icon, Widget info) {
@@ -179,7 +178,7 @@ class _LayerListPageState extends State<LayerListPage> with WidgetsBindingObserv
         ?.map((layer) => wrapItem(
             Text(
               "${layer.id}",
-              style: TextStyle(color: Colors.white, fontSize: _ITEM_TEXT_SIZE),
+              style: const TextStyle(color: Colors.white, fontSize: _ITEM_TEXT_SIZE),
             ),
             iconImage,
             createItem(layer)))

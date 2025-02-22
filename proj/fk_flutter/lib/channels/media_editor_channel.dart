@@ -1,11 +1,10 @@
-import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 import 'dart:ffi';
 import 'package:fk_flutter/utils/logcat.dart';
 
 const _mediaEditorMethodChannel =
-    const MethodChannel("com.alimin.flutter/media_editor");
+    MethodChannel("com.alimin.flutter/media_editor");
 
 class MediaEditorChannel {
   late final void Function() attachWindowDone;

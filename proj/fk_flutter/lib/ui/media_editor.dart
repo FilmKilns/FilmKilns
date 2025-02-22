@@ -10,8 +10,6 @@ import '../Properties.dart';
 import 'package:fk_flutter/entity/layer_state.dart';
 import 'package:fk_flutter/utils/system_utils.dart';
 import 'package:fk_flutter/ui/camera_shot.dart';
-import 'package:fk_flutter/fk/plugin/fk_color_adjust_plugin.dart';
-import 'package:fk_flutter/fk/entity/FkValue.dart';
 
 class MediaEditorPage extends StatefulWidget {
   const MediaEditorPage(this.fixedCameraPage, {super.key, required this.title});

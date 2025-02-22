@@ -4,7 +4,6 @@ import 'package:fk_flutter/utils/logcat.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:fk_flutter/fk/entity/FkValue.dart';
-import 'package:fk_flutter/fk/plugin/fk_color_adjust_plugin.dart';
 import 'package:fk_flutter/fk/plugin/fk_image_hist_plugin.dart';
 
 class CameraShotPage extends StatefulWidget {
@@ -129,8 +128,8 @@ class _CameraShotPageState extends State<CameraShotPage>
         });
       },
       style: ButtonStyle(
-        shape: MaterialStateProperty.all(const CircleBorder()),
-        backgroundColor: MaterialStateProperty.all(Colors.red),
+        shape: WidgetStateProperty.all(const CircleBorder()),
+        backgroundColor: WidgetStateProperty.all(Colors.red),
       ),
         child: Container(
           width: 64,
@@ -155,7 +154,7 @@ class _CameraShotPageState extends State<CameraShotPage>
             },
             style: ButtonStyle(
                 padding:
-                MaterialStateProperty.all(EdgeInsets.all(12))),
+                WidgetStateProperty.all(const EdgeInsets.all(12))),
             icon: Icon(
                 !_isCaptured()
                     ? Icons.cameraswitch_outlined
@@ -187,7 +186,7 @@ class _CameraShotPageState extends State<CameraShotPage>
                     widget._editor.switchCamera();
                   },
                   style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.all(12))),
+                      padding: WidgetStateProperty.all(const EdgeInsets.all(12))),
                   icon: Icon(
                       !_isCaptured()
                           ? Icons.cameraswitch_outlined
@@ -209,8 +208,8 @@ class _CameraShotPageState extends State<CameraShotPage>
                       },
                       style: ButtonStyle(
                           padding:
-                              MaterialStateProperty.all(EdgeInsets.all(8))),
-                      icon: Icon(Icons.close, color: Colors.white),
+                              WidgetStateProperty.all(const EdgeInsets.all(8))),
+                      icon: const Icon(Icons.close, color: Colors.white),
                       iconSize: 40,
                     ),
                   ))

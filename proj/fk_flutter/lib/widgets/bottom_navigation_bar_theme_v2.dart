@@ -5,7 +5,7 @@
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' show MaterialStateProperty, Theme;
+import 'package:flutter/material.dart' show WidgetStateProperty, Theme;
 import 'package:flutter/widgets.dart';
 
 import 'bottom_navigation_bar_v2.dart';
@@ -129,7 +129,7 @@ class BottomNavigationBarV2ThemeData with Diagnosticable {
   final BottomNavigationBarV2LandscapeLayout? landscapeLayout;
 
   /// If specified, overrides the default value of [BottomNavigationBar.mouseCursor].
-  final MaterialStateProperty<MouseCursor?>? mouseCursor;
+  final WidgetStateProperty<MouseCursor?>? mouseCursor;
 
   /// Creates a copy of this object but with the given fields replaced with the
   /// new values.
@@ -147,7 +147,7 @@ class BottomNavigationBarV2ThemeData with Diagnosticable {
     BottomNavigationBarV2Type? type,
     bool? enableFeedback,
     BottomNavigationBarV2LandscapeLayout? landscapeLayout,
-    MaterialStateProperty<MouseCursor?>? mouseCursor,
+    WidgetStateProperty<MouseCursor?>? mouseCursor,
   }) {
     return BottomNavigationBarV2ThemeData(
       backgroundColor: backgroundColor ?? this.backgroundColor,
@@ -251,7 +251,7 @@ class BottomNavigationBarV2ThemeData with Diagnosticable {
     properties.add(DiagnosticsProperty<BottomNavigationBarV2Type>('type', type, defaultValue: null));
     properties.add(DiagnosticsProperty<bool>('enableFeedback', enableFeedback, defaultValue: null));
     properties.add(DiagnosticsProperty<BottomNavigationBarV2LandscapeLayout>('landscapeLayout', landscapeLayout, defaultValue: null));
-    properties.add(DiagnosticsProperty<MaterialStateProperty<MouseCursor?>>('mouseCursor', mouseCursor, defaultValue: null));
+    properties.add(DiagnosticsProperty<WidgetStateProperty<MouseCursor?>>('mouseCursor', mouseCursor, defaultValue: null));
   }
 }
 
