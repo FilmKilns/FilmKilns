@@ -122,9 +122,13 @@ class _CameraShotPageState extends State<CameraShotPage>
         widget._editor.capture().then((layerId){
           Logcat.debug('Capture layerId=$layerId');
           _closeCamera();
-          setState(() {
-            _captureLayer = layerId;
-          });
+          if (layerId > 0) {
+            setState(() {
+              _captureLayer = layerId;
+            });
+          } else {
+            _captureCancel();
+          }
         });
       },
       style: ButtonStyle(

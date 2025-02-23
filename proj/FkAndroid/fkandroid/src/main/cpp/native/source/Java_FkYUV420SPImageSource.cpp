@@ -54,5 +54,6 @@ namespace Java_FkYUV420SPImageSource {
             auto source = std::make_shared<FkYUV420SPImageSource>(desc);
             return FkInstanceHolder::getInstance().put(std::dynamic_pointer_cast<FkAbsImageSource>(source));
         }
+        return 0;
     }
 }

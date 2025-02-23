@@ -9,11 +9,11 @@ abstract class FkNativeObject {
     abstract fun onNativeDestroy(handle: Long): Boolean
     open fun create(): FkResult {
         val _handle = onNativeCreate()
-        synchronized(this) {
-            if (_handle != 0L) {
+        if (_handle != 0L) {
+            synchronized(this) {
                 handle = _handle
-                return FkResult.OK
             }
+            return FkResult.OK
         }
         return FkResult.INVALID_DATA
     }

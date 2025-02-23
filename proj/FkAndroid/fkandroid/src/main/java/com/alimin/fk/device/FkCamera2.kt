@@ -326,6 +326,7 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
         } else {
             null
         }
+        source?.create()
         return source
     }
 
