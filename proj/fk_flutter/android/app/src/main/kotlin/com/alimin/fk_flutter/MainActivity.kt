@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.CameraManager
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.util.Size
 import android.view.Surface
@@ -69,6 +70,33 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Texture
     private fun testNativeObject() {
         val obj = FkNativeTestObject()
         obj.create()
+        if (!obj.getBool(true)) {
+            throw RuntimeException("[FAIL] testNativeObject error.")
+        }
+        if (obj.getByte(1) != 1.toByte()) {
+            throw RuntimeException("[FAIL] testNativeObject error.")
+        }
+        if (obj.getChar('2') != '2') {
+            throw RuntimeException("[FAIL] testNativeObject error.")
+        }
+        if (obj.getShort(30) != 30.toShort()) {
+            throw RuntimeException("[FAIL] testNativeObject error.")
+        }
+        if (obj.getInt(40) != 40) {
+            throw RuntimeException("[FAIL] testNativeObject error.")
+        }
+        if (obj.getLong(50) != 50L) {
+            throw RuntimeException("[FAIL] testNativeObject error.")
+        }
+        if (obj.getFloat(6.0f) != 6.0f) {
+            throw RuntimeException("[FAIL] testNativeObject error.")
+        }
+        if (obj.getDouble(7.0) != 7.0) {
+            throw RuntimeException("[FAIL] testNativeObject error.")
+        }
+        if (!TextUtils.equals(obj.getString("80"), "80")) {
+            throw RuntimeException("[FAIL] testNativeObject error.")
+        }
         obj.destroy()
     }
 

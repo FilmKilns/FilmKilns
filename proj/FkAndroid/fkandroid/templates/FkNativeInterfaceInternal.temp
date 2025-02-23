@@ -5,16 +5,26 @@
 * LICENSE file in the root directory of this source tree.
 *
 * AUTHOR: filmkilns(email: filmkilns@outlook.com, github: https://github.com/filmkilns)
-
+*
 * CREATE AUTO. DO NOT EDIT.
 */
 
+/**
+* +--------------------------------------------+
+* |          CREATE AUTO. DO NOT EDIT          |
+* +--------------------------------------------+
+*/
 \#include "Java_${className}.h"
 \#include "FkJniDefinition.h"
 \#include "FkJavaRuntime.h"
 
 namespace Java_${className} {
 
+    /**
+     * +--------------------------------------------+
+     * |  START of internal interface. DO NOT EDIT  |
+     * +--------------------------------------------+
+     */
 #foreach($method in ${classMethods})
     ${method.returnType} _${method.name}(JNIEnv *env, jclass cls, ${method.args}) {
 #if (${method.hasReturn})
@@ -25,6 +35,12 @@ namespace Java_${className} {
     }
 
 #end
+    /**
+     * +------------------------------------------+
+     * |  END of internal interface. DO NOT EDIT  |
+     * +------------------------------------------+
+     */
+
     bool reg(JNIEnv *env) {
         return FkJavaRuntime::jniRegister(env, CLASS_NAME, METHODS, METHODS_NUM);
     }
@@ -35,7 +51,7 @@ namespace Java_${className} {
 
     const JNINativeMethod METHODS[] = {
 #foreach($method in ${classMethods})
-            {"_${method.name}", "(${method.argsSig})${method.returnSig}", (void *) _${method.name}},
+            {"${method.name}", "(${method.argsSig})${method.returnSig}", (void *) _${method.name}},
 #end
     };
 

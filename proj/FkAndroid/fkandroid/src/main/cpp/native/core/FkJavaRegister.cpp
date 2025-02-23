@@ -5,10 +5,15 @@
 * LICENSE file in the root directory of this source tree.
 *
 * AUTHOR: filmkilns(email: filmkilns@outlook.com, github: https://github.com/filmkilns)
- *
+*
 * CREATE AUTO. DO NOT EDIT.
 */
 
+/**
+* +--------------------------------------------+
+* |          CREATE AUTO. DO NOT EDIT          |
+* +--------------------------------------------+
+*/
 #include "FkJavaRegister.h"
 #include "FkJniDefinition.h"
 #include "../source/Java_FkNativeTestObject.h"

@@ -51,6 +51,9 @@ public class CreationMethod {
                 || returnType == double.class) {
             cast[0] = "(" + returnJType + ")";
             cast[1] = "";
+        } else if (returnType == byte[].class || returnType == String.class) {
+            cast[0] = "";
+            cast[1] = "->jVal()";
         }
         return cast;
     }

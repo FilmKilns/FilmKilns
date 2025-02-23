@@ -5,24 +5,51 @@
 * LICENSE file in the root directory of this source tree.
 *
 * AUTHOR: filmkilns(email: filmkilns@outlook.com, github: https://github.com/filmkilns)
- *
+*
 * CREATE AUTO. DO NOT EDIT.
 */
 
+/**
+* +--------------------------------------------+
+* |          CREATE AUTO. DO NOT EDIT          |
+* +--------------------------------------------+
+*/
 #pragma once
 \#include "FkJniDefinition.h"
 \#include <any>
 
 namespace Java_${className} {
 
+    /**
+     * +----------------------------------------+
+     * |  START of public interface. NEED IMPL  |
+     * +----------------------------------------+
+     */
 #foreach($method in ${classMethods})
     ${method.returnCType} ${method.name}(JNIEnv *env, jclass cls, ${method.argsC});
 
 #end
+    /**
+     * +--------------------------------------+
+     * |  END of public interface. NEED IMPL  |
+     * +--------------------------------------+
+     */
+
+    /**
+     * +--------------------------------------------+
+     * |  START of internal interface. DO NOT EDIT  |
+     * +--------------------------------------------+
+     */
 #foreach($method in ${classMethods})
     ${method.returnType} _${method.name}(JNIEnv *env, jclass cls, ${method.args});
 
 #end
+    /**
+     * +------------------------------------------+
+     * |  END of internal interface. DO NOT EDIT  |
+     * +------------------------------------------+
+     */
+
     bool reg(JNIEnv *env);
 
     extern const char *CLASS_NAME;
