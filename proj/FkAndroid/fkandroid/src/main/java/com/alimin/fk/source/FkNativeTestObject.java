@@ -1,9 +1,12 @@
 package com.alimin.fk.source;
 
+import androidx.annotation.Keep;
+
 import com.alimin.fk.core.FkNativeObject;
 import com.alimin.fk.entity.FkResult;
 import com.filmkilns.annotation.FkNativeAuto;
 
+@Keep
 @FkNativeAuto(path = "cpp/native/source")
 public class FkNativeTestObject extends FkNativeObject {
     @Override

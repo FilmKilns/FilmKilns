@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import android.graphics.SurfaceTexture;
 import android.view.Surface;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -16,6 +17,7 @@ import com.alimin.fk.utils.FkLogcat;
 import java.util.ArrayList;
 import java.util.List;
 
+@Keep
 @FkNativeAuto(path = "cpp/native/source")
 public class FkSurfaceTextureSource extends FkAbsImageSource2 {
     private interface DoneCallback {
