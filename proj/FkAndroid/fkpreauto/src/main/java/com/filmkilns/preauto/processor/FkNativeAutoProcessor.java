@@ -57,6 +57,9 @@ public class FkNativeAutoProcessor extends FkAbsProcessor {
     }
 
     private void generate(CreationClass item) {
+        if (item.methods.isEmpty()) {
+            return;
+        }
         String dirStr = getSourceMainDir() + "/" + item.path;
         File dir = new File(dirStr);
         if (!dir.exists()) {
@@ -136,6 +139,9 @@ public class FkNativeAutoProcessor extends FkAbsProcessor {
         List<String> regIncludes = new ArrayList<>();
         List<String> regs = new ArrayList<>();
         for (CreationClass it : items) {
+            if (it.methods.isEmpty()) {
+                continue;
+            }
             regIncludes.add(getHeaderFile(it).getAbsolutePath().replace(getSourceMainDir() + "/cpp/native", ".."));
             regs.add(it.name);
         }
