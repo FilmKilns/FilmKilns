@@ -66,12 +66,16 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Texture
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        FilmKilns.init(applicationContext)
+    private fun testNativeObject() {
         val obj = FkNativeTestObject()
         obj.create()
         obj.destroy()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        FilmKilns.init(applicationContext)
+        testNativeObject()
         Log.i(TAG, "transparencyMode=${transparencyMode}")
         flutterEngine?.apply {
             Log.i(TAG, "Create media_editor channel")

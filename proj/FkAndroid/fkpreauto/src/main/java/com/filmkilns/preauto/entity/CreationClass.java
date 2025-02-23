@@ -23,11 +23,13 @@ public class CreationClass {
     }
 
     public String name;
+    public String canonicalName;
     public String path;
     public final List<CreationMethod> methods = new ArrayList<>();
 
     public CreationClass(Symbol.ClassSymbol symbol, String path) {
         this.name = getSimpleClassName(symbol);
+        this.canonicalName = symbol.className();
         this.path = path;
         for (Symbol s : symbol.members().getSymbols()) {
             if (s instanceof Symbol.MethodSymbol && isNativeMethod((Symbol.MethodSymbol) s)) {
@@ -89,14 +91,14 @@ public class CreationClass {
             Map.entry(boolean.class, new Type(boolean.class, "jboolean", "Z", "bool")),
             Map.entry(byte.class, new Type(byte.class, "jbyte", "B", "uint8_t")),
             Map.entry(char.class, new Type(char.class, "jchar", "C", "char")),
-            Map.entry(short.class, new Type(short.class, "jshort", "S", "uint16_t")),
-            Map.entry(int.class, new Type(int.class, "jint", "I", "uint32_t")),
-            Map.entry(long.class, new Type(long.class, "jlong", "J", "uint64_t")),
+            Map.entry(short.class, new Type(short.class, "jshort", "S", "int16_t")),
+            Map.entry(int.class, new Type(int.class, "jint", "I", "int32_t")),
+            Map.entry(long.class, new Type(long.class, "jlong", "J", "int64_t")),
             Map.entry(float.class, new Type(float.class, "jfloat", "F", "float")),
             Map.entry(double.class, new Type(double.class, "jdouble", "D", "double")),
             Map.entry(void.class, new Type(void.class, "void", "V", "void")),
-            Map.entry(String.class, new Type(String.class, "jstring", "Ljava/lang/String;", "std::string")),
+            Map.entry(String.class, new Type(String.class, "jstring", "Ljava/lang/String;", "const std::shared_ptr<FkJString> &")),
             Map.entry(Object.class, new Type(Object.class, "jobject", "Ljava/lang/Object;", "std::any")),
-            Map.entry(byte[].class, new Type(byte[].class, "jbyteArray", "[B", "uint8_t[]"))
+            Map.entry(byte[].class, new Type(byte[].class, "jbyteArray", "[B", "const std::shared_ptr<FkJBuffer> &"))
     );
 }

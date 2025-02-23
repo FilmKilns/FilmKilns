@@ -1,13 +1,26 @@
-//
-// Created by Alimin on 2025/2/19.
-//
+/*
+* Copyright (c) 2018-present, filmkilns(email: filmkilns@outlook.com, github: https://github.com/filmkilns).
+*
+* This source code is licensed under the MIT license found in the
+* LICENSE file in the root directory of this source tree.
+*
+* AUTHOR: filmkilns(email: filmkilns@outlook.com, github: https://github.com/filmkilns)
+ *
+* CREATE AUTO. DO NOT EDIT.
+*/
+
 #pragma once
-\#include <jni.h>
+\#include "FkJniDefinition.h"
+\#include <any>
 
 namespace Java_${className} {
 
 #foreach($method in ${classMethods})
-    ${method.returnSig} ${method.name}(JNIEnv *env, jclass cls, ${method.argsSig});
+    ${method.returnCType} ${method.name}(JNIEnv *env, jclass cls, ${method.argsC});
+
+#end
+#foreach($method in ${classMethods})
+    ${method.returnType} _${method.name}(JNIEnv *env, jclass cls, ${method.args});
 
 #end
     bool reg(JNIEnv *env);

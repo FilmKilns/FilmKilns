@@ -9,14 +9,18 @@
 * CREATE AUTO. DO NOT EDIT.
 */
 
-#include "FkJavaRegister.h"
-#include "FkJniDefinition.h"
-#include "../source/Java_FkNativeTestObject.h"
+\#include "FkJavaRegister.h"
+\#include "FkJniDefinition.h"
+#foreach(${item} in ${regIncludes})
+\#include "${item}"
+#end
 
 namespace film_k {
     const char *TAG = "FkJavaRegister";
 
     void jni_register_all(JNIEnv *env) {
-        Java_FkNativeTestObject::reg(env);
+#foreach(${item} in ${regFuncItems})
+        Java_${item}::reg(env);
+#end
     }
 }

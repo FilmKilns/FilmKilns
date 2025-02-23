@@ -62,29 +62,45 @@ public class FkNativeAutoProcessor extends FkAbsProcessor {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        generateHeader(item, new File(dir,  "Java_" + item.name + ".h"));
+        generateHeader(item, getHeaderFile(item));
+        generateCPP(item, getCPPFile(item));
+    }
+
+    private File getHeaderFile(CreationClass item) {
+        String dirStr = getSourceMainDir() + "/" + item.path;
+        return new File(dirStr,  "Java_" + item.name + ".h");
+    }
+
+    private File getCPPFile(CreationClass item) {
+        String dirStr = getSourceMainDir() + "/" + item.path;
+        return new File(dirStr,  "Java_" + item.name + "_Internal.cpp");
     }
 
     private Template createTemplate(String tempName) {
         return engine.getTemplate(tempName);
     }
 
-    private void generateHeader(CreationClass item, File file) {
-        if (file.exists()) {
-            file.delete();
-        }
+    private VelocityContext createContext(CreationClass item) {
         List<CreationMethod.JMethodInfo> classMethods = new ArrayList<>();
         for (CreationMethod it : item.methods) {
             classMethods.add(new CreationMethod.JMethodInfo(it));
         }
         VelocityContext ctx = new VelocityContext();
         ctx.put("className", item.name);
+        ctx.put("classCanonicalName", item.canonicalName.replaceAll("\\.", "/"));
         ctx.put("classMethodCnt", item.methods.size());
         ctx.put("classMethods", classMethods);
+        return ctx;
+    }
+
+    private void generateHeader(CreationClass item, File file) {
+        if (file.exists()) {
+            file.delete();
+        }
         try {
             FileWriter writer = new FileWriter(file);
             Template template = createTemplate("FkNativeInterface.temp");
-            template.merge(ctx, writer);
+            template.merge(createContext(item), writer);
             writer.flush();
             writer.close();
         } catch (IOException e) {
@@ -92,8 +108,49 @@ public class FkNativeAutoProcessor extends FkAbsProcessor {
         }
     }
 
-    private void generateCPP() {
+    private void generateCPP(CreationClass item, File file) {
+        if (file.exists()) {
+            file.delete();
+        }
+        try {
+            FileWriter writer = new FileWriter(file);
+            Template template = createTemplate("FkNativeInterfaceInternal.temp");
+            template.merge(createContext(item), writer);
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
+    }
+
+    private void generateRegister(List<CreationClass> items) {
+        if (items.isEmpty()) {
+            return;
+        }
+        File file = new File(getSourceMainDir(), "cpp/native/core/FkJavaRegister.cpp");
+        logI(TAG, "generateRegister file=" + file.getAbsolutePath());
+        if (file.exists()) {
+            file.delete();
+        }
+        List<String> regIncludes = new ArrayList<>();
+        List<String> regs = new ArrayList<>();
+        for (CreationClass it : items) {
+            regIncludes.add(getHeaderFile(it).getAbsolutePath().replace(getSourceMainDir() + "/cpp/native", ".."));
+            regs.add(it.name);
+        }
+        VelocityContext ctx = new VelocityContext();
+        ctx.put("regIncludes", regIncludes);
+        ctx.put("regFuncItems", regs);
+        try {
+            FileWriter writer = new FileWriter(file);
+            Template template = createTemplate("FkJavaRegister.temp");
+            template.merge(ctx, writer);
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -104,6 +161,7 @@ public class FkNativeAutoProcessor extends FkAbsProcessor {
         for (CreationClass it : items) {
             generate(it);
         }
+        generateRegister(items);
         return false;
     }
 
