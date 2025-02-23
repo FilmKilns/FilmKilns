@@ -211,13 +211,13 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Texture
             "capture" -> {
                 val handle = arguments["handle"] as Int
                 camera?.takePicture(object : OnCaptureListener {
-                    override fun onResult(source: FkAbsImageSource?) {
+                    override fun onResult(source: FkAbsImageSource2?) {
                         if (source == null) {
                             result.error("-1", "Capture fail", null)
                         } else {
                             val engine = FkImage(handle.toLong())
-//                            val layerId = engine.newLayerWithSource(source)
-//                            result.success(layerId)
+                            val layerId = engine.newLayerWithSource(source)
+                            result.success(layerId)
                         }
                     }
                 })

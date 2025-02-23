@@ -300,7 +300,7 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
         }
     }
 
-    private fun createImageSource(reader: ImageReader, image: Image): FkAbsImageSource? {
+    private fun createImageSource(reader: ImageReader, image: Image): FkAbsImageSource2? {
         val orientation = if (curFeatures!!.facing == FkCameraFeatures.kFacing.Back) ExifInterface.ORIENTATION_ROTATE_90 else ExifInterface.ORIENTATION_TRANSVERSE
         val source = if (reader.imageFormat == ImageFormat.JPEG) {
             val buf = image.planes[0].buffer

@@ -1,6 +1,5 @@
 package com.alimin.fk.device
 
-import com.alimin.fk.core.FkAbsImageSource
 import com.alimin.fk.core.FkAbsImageSource2
 import com.alimin.fk.entity.FkCameraFeatures
 import com.alimin.fk.entity.FkCameraSettings
@@ -46,7 +45,7 @@ interface OnInfoListener {
 }
 
 interface OnCaptureListener {
-    fun onResult(source: FkAbsImageSource?)
+    fun onResult(source: FkAbsImageSource2?)
 }
 
 enum class FkCameraState {
