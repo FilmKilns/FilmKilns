@@ -16,7 +16,8 @@ import com.alimin.fk.utils.FkLogcat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FkSurfaceTextureSource2 extends FkAbsImageSource2 {
+@FkNativeAuto(path = "cpp/native/source")
+public class FkSurfaceTextureSource extends FkAbsImageSource2 {
     private interface DoneCallback {
         void done(int arg0, long arg1, String arg2);
     }
@@ -33,7 +34,7 @@ public class FkSurfaceTextureSource2 extends FkAbsImageSource2 {
     private DoneCallback createFunc;
     private long timestampInNS = 0L;
 
-    public FkSurfaceTextureSource2() {
+    public FkSurfaceTextureSource() {
         super();
     }
 
@@ -203,11 +204,15 @@ public class FkSurfaceTextureSource2 extends FkAbsImageSource2 {
 
     @Override
     public long onNativeCreate() {
-        return FkImageSourceNativeFactory.Companion.nativeCreateSurface(this);
+        return nativeCreateSurface(this);
     }
 
     public boolean onNativeDestroy(long handle) {
-        FkImageSourceNativeFactory.Companion.nativeDestroy(handle);
+        nativeDestroy(handle);
         return true;
     }
+
+    private native long nativeCreateSurface(Object instance);
+
+    private native void nativeDestroy(long handle);
 }

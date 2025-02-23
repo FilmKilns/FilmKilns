@@ -17,11 +17,13 @@
 #include "FkJavaRegister.h"
 #include "FkJniDefinition.h"
 #include "../source/Java_FkNativeTestObject.h"
+#include "../source/Java_FkSurfaceTextureSource.h"
 
 namespace film_k {
     const char *TAG = "FkJavaRegister";
 
     void jni_register_all(JNIEnv *env) {
         Java_FkNativeTestObject::reg(env);
+        Java_FkSurfaceTextureSource::reg(env);
     }
 }
