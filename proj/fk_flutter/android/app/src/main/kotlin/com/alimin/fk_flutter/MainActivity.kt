@@ -18,8 +18,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.alimin.fk.FilmKilns
 import com.alimin.fk.core.FkAbsImageSource
-import com.alimin.fk.core.FkAbsImageSource2
-import com.alimin.fk.core.FkNativeObject
 import com.alimin.fk.define.kScaleType
 import com.alimin.fk.device.FkAbsCamera
 import com.alimin.fk.device.FkCamera2
@@ -67,43 +65,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Texture
         }
     }
 
-    private fun testNativeObject() {
-        val obj = FkNativeTestObject()
-        obj.create()
-        if (!obj.getBool(true)) {
-            throw RuntimeException("[FAIL] testNativeObject error.")
-        }
-        if (obj.getByte(1) != 1.toByte()) {
-            throw RuntimeException("[FAIL] testNativeObject error.")
-        }
-        if (obj.getChar('2') != '2') {
-            throw RuntimeException("[FAIL] testNativeObject error.")
-        }
-        if (obj.getShort(30) != 30.toShort()) {
-            throw RuntimeException("[FAIL] testNativeObject error.")
-        }
-        if (obj.getInt(40) != 40) {
-            throw RuntimeException("[FAIL] testNativeObject error.")
-        }
-        if (obj.getLong(50) != 50L) {
-            throw RuntimeException("[FAIL] testNativeObject error.")
-        }
-        if (obj.getFloat(6.0f) != 6.0f) {
-            throw RuntimeException("[FAIL] testNativeObject error.")
-        }
-        if (obj.getDouble(7.0) != 7.0) {
-            throw RuntimeException("[FAIL] testNativeObject error.")
-        }
-        if (!TextUtils.equals(obj.getString("80"), "80")) {
-            throw RuntimeException("[FAIL] testNativeObject error.")
-        }
-        obj.destroy()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FilmKilns.init(applicationContext)
-        testNativeObject()
         Log.i(TAG, "transparencyMode=${transparencyMode}")
         flutterEngine?.apply {
             Log.i(TAG, "Create media_editor channel")
@@ -211,7 +175,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Texture
             "capture" -> {
                 val handle = arguments["handle"] as Int
                 camera?.takePicture(object : OnCaptureListener {
-                    override fun onResult(source: FkAbsImageSource2?) {
+                    override fun onResult(source: FkAbsImageSource?) {
                         if (source == null) {
                             result.error("-1", "Capture fail", null)
                         } else {
@@ -273,7 +237,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Texture
         camera = FkCamera2(cameraManager!!)
         camera?.let {
             val engine = FkImage(handle.toLong())
-            it.getImageSource().addOnRenderListener(object : FkAbsImageSource2.OnRenderListener{
+            it.getImageSource().addOnRenderListener(object : FkAbsImageSource.OnRenderListener{
                 override fun onCreate() {
                 }
 

@@ -9,7 +9,7 @@ import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.alimin.fk.core.FkAbsImageSource2;
+import com.alimin.fk.core.FkAbsImageSource;
 import com.alimin.fk.entity.FkResult;
 import com.filmkilns.annotation.FkNativeAuto;
 import com.alimin.fk.utils.FkLogcat;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @Keep
 @FkNativeAuto(path = "cpp/native/source")
-public class FkSurfaceTextureSource extends FkAbsImageSource2 {
+public class FkSurfaceTextureSource extends FkAbsImageSource {
     private interface DoneCallback {
         void done(int arg0, long arg1, String arg2);
     }
@@ -214,7 +214,7 @@ public class FkSurfaceTextureSource extends FkAbsImageSource2 {
         return true;
     }
 
-    private native long nativeCreateSurface(FkAbsImageSource2 instance);
+    private native long nativeCreateSurface(FkAbsImageSource instance);
 
     private native void nativeDestroy(long handle);
 }

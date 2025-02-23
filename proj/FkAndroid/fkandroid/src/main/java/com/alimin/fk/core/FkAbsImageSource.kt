@@ -1,43 +1,33 @@
 package com.alimin.fk.core
 
-import android.util.Log
-import com.alimin.fk.utils.FkLogcat
-import java.nio.ByteBuffer
-
-
-abstract class FkAbsImageSource {
-    protected abstract val handle: Long
-    companion object {
-
-        external fun nativeCreateSurface(instance: Any): Long
-
-        external fun nativeCreateCompressed(instance: FkAbsImageSource, buf: ByteBuffer, orientation: Int): Long
-
-        external fun nativeCreateYUV420(instance: FkAbsImageSource, planes: Array<ByteBuffer>, width: Int, height: Int, orientation: Int): Long
-
-        external fun nativeCreateBitmap(instance: FkAbsImageSource, buf: ByteBuffer, width: Int, height: Int): Long
-
-        external fun nativeDestroy(handle: Long)
-    }
-
-    fun getNativeHandle(): Long = handle
-
-    protected fun finalize() {
-        FkLogcat.i("FkAbsImageSource", "${javaClass.name} finalize called")
-        nativeDestroy(handle)
-    }
+abstract class FkAbsImageSource : FkNativeObject() {
+    private val infoListeners = ArrayList<OnRenderListener>()
 
     abstract fun onCreate(arg0: Int, arg1: Long, arg2: String?): Int
     abstract fun onDestroy(): Int
     abstract fun onRender(arg0: Int, arg1: Long, arg2: String?): Int
-
     abstract fun getSize(): IntArray
-
     abstract fun getTimestampInNS(): Long
 
-    abstract fun addOnRenderListener(l: OnRenderListener)
+    open fun addOnRenderListener(l: OnRenderListener) {
+        synchronized(infoListeners) {
+            infoListeners.add(l)
+        }
+    }
 
-    abstract fun removeOnRenderListener(l: OnRenderListener)
+    open fun removeOnRenderListener(l: OnRenderListener) {
+        synchronized(infoListeners) {
+            infoListeners.remove(l)
+        }
+    }
+
+    open fun copyInfoListeners(): List<OnRenderListener> {
+        val listeners = ArrayList<OnRenderListener>()
+        synchronized(infoListeners) {
+            infoListeners.forEach { listeners.add(it) }
+        }
+        return listeners
+    }
 
     interface OnRenderListener {
         fun onCreate()

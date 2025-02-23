@@ -1,12 +1,10 @@
 package com.alimin.fk.source;
 
-import android.util.Size;
-
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.alimin.fk.core.FkAbsImageSource2;
+import com.alimin.fk.core.FkAbsImageSource;
 import com.alimin.fk.utils.FkLogcat;
 import com.filmkilns.annotation.FkNativeAuto;
 
@@ -14,7 +12,7 @@ import java.nio.ByteBuffer;
 
 @Keep
 @FkNativeAuto(path = "cpp/native/source")
-public class FkCompressedImageSource extends FkAbsImageSource2 {
+public class FkCompressedImageSource extends FkAbsImageSource {
     private final static String TAG = "FkCompressedImageSource";
     private ByteBuffer buf;
     private int orientation;
@@ -64,7 +62,7 @@ public class FkCompressedImageSource extends FkAbsImageSource2 {
         return true;
     }
 
-    private native long nativeCreate(FkAbsImageSource2 instance, ByteBuffer buf, int orientation);
+    private native long nativeCreate(FkAbsImageSource instance, ByteBuffer buf, int orientation);
 
     private native void nativeDestroy(long handle);
 }

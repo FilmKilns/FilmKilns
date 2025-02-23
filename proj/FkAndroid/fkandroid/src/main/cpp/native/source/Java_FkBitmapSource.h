@@ -14,24 +14,35 @@
 * |          CREATE AUTO. DO NOT EDIT          |
 * +--------------------------------------------+
 */
-#include "Java_FkCompressedImageSource.h"
+#pragma once
 #include "FkJniDefinition.h"
-#include "FkJavaRuntime.h"
+#include <any>
 
-namespace Java_FkCompressedImageSource {
+namespace Java_FkBitmapSource {
+
+    /**
+     * +----------------------------------------+
+     * |  START of public interface. NEED IMPL  |
+     * +----------------------------------------+
+     */
+    void nativeDestroy(JNIEnv *env, jclass cls, int64_t handle);
+
+    int64_t nativeCreate(JNIEnv *env, jclass cls, jobject instance, jobject buf, int32_t width, int32_t height);
+
+    /**
+     * +--------------------------------------+
+     * |  END of public interface. NEED IMPL  |
+     * +--------------------------------------+
+     */
 
     /**
      * +--------------------------------------------+
      * |  START of internal interface. DO NOT EDIT  |
      * +--------------------------------------------+
      */
-    void _nativeDestroy(JNIEnv *env, jclass cls, jlong handle) {
-        nativeDestroy(env, cls, handle);
-    }
+    void _nativeDestroy(JNIEnv *env, jclass cls, jlong handle);
 
-    jlong _nativeCreate(JNIEnv *env, jclass cls, jobject instance, jobject buf, jint orientation) {
-        return (jlong)nativeCreate(env, cls, instance, buf, orientation);
-    }
+    jlong _nativeCreate(JNIEnv *env, jclass cls, jobject instance, jobject buf, jint width, jint height);
 
     /**
      * +------------------------------------------+
@@ -39,17 +50,12 @@ namespace Java_FkCompressedImageSource {
      * +------------------------------------------+
      */
 
-    bool reg(JNIEnv *env) {
-        return FkJavaRuntime::jniRegister(env, CLASS_NAME, METHODS, METHODS_NUM);
-    }
+    bool reg(JNIEnv *env);
 
-    const char *CLASS_NAME = "com/alimin/fk/source/FkCompressedImageSource";
+    extern const char *CLASS_NAME;
 
-    const int METHODS_NUM = 2;
+    extern const int METHODS_NUM;
 
-    const JNINativeMethod METHODS[] = {
-            {"nativeDestroy", "(J)V", (void *) _nativeDestroy},
-            {"nativeCreate", "(Lcom/alimin/fk/core/FkAbsImageSource;Ljava/nio/ByteBuffer;I)J", (void *) _nativeCreate},
-    };
+    extern const JNINativeMethod METHODS[2];
 
 };

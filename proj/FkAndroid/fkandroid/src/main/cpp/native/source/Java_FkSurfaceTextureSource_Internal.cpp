@@ -49,7 +49,7 @@ namespace Java_FkSurfaceTextureSource {
 
     const JNINativeMethod METHODS[] = {
             {"nativeDestroy", "(J)V", (void *) _nativeDestroy},
-            {"nativeCreateSurface", "(Lcom/alimin/fk/core/FkAbsImageSource2;)J", (void *) _nativeCreateSurface},
+            {"nativeCreateSurface", "(Lcom/alimin/fk/core/FkAbsImageSource;)J", (void *) _nativeCreateSurface},
     };
 
 };

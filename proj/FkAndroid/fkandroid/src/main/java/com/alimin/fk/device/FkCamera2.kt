@@ -17,7 +17,6 @@ import android.os.HandlerThread
 import android.util.Size
 import android.view.Surface
 import com.alimin.fk.core.FkAbsImageSource
-import com.alimin.fk.core.FkAbsImageSource2
 import com.alimin.fk.entity.FkCameraFeatureKey
 import com.alimin.fk.entity.FkCameraFeatures
 import com.alimin.fk.entity.FkCameraSettings
@@ -137,7 +136,7 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
         return 0
     }
 
-    override fun getImageSource(): FkAbsImageSource2 = surfaceSource
+    override fun getImageSource(): FkAbsImageSource = surfaceSource
 
     override fun takePicture(listener: OnCaptureListener): Int {
         if (cameraDevice == null) {
@@ -300,7 +299,7 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
         }
     }
 
-    private fun createImageSource(reader: ImageReader, image: Image): FkAbsImageSource2? {
+    private fun createImageSource(reader: ImageReader, image: Image): FkAbsImageSource? {
         val orientation = if (curFeatures!!.facing == FkCameraFeatures.kFacing.Back) ExifInterface.ORIENTATION_ROTATE_90 else ExifInterface.ORIENTATION_TRANSVERSE
         val source = if (reader.imageFormat == ImageFormat.JPEG) {
             val buf = image.planes[0].buffer

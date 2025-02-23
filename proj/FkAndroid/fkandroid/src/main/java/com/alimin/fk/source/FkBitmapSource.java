@@ -14,32 +14,16 @@ import java.nio.ByteBuffer;
 
 @Keep
 @FkNativeAuto(path = "cpp/native/source")
-public class FkYUV420SPImageSource extends FkAbsImageSource {
-    private final static String TAG = "FkYUV420SPImageSource";
+public class FkBitmapSource extends FkAbsImageSource {
+    private final static String TAG = "FkBitmapSource";
+    private ByteBuffer buf;
     private Size size;
-    private ByteBuffer y;
-    private ByteBuffer u;
-    private ByteBuffer v;
-    private int orientation;
 
-    public FkYUV420SPImageSource(ByteBuffer y, ByteBuffer uv, Size size, int orientation) {
+    public FkBitmapSource(ByteBuffer buf, int width, int height) {
         super();
         FkLogcat.i(TAG, "Constructor");
-        this.size = size;
-        this.y = y;
-        this.u = uv;
-        this.v = null;
-        this.orientation = orientation;
-    }
-
-    public FkYUV420SPImageSource(ByteBuffer y, ByteBuffer u, ByteBuffer v, Size size, int orientation) {
-        super();
-        FkLogcat.i(TAG, "Constructor");
-        this.size = size;
-        this.y = y;
-        this.u = u;
-        this.v = v;
-        this.orientation = orientation;
+        this.buf = buf;
+        this.size = new Size(width, height);
     }
 
     @Override
@@ -72,7 +56,7 @@ public class FkYUV420SPImageSource extends FkAbsImageSource {
 
     @Override
     public long onNativeCreate() {
-        return nativeCreate(this, y, u, v, size.getWidth(), size.getHeight(), orientation);
+        return nativeCreate(this, buf, size.getWidth(), size.getHeight());
     }
 
     public boolean onNativeDestroy(long handle) {
@@ -80,7 +64,7 @@ public class FkYUV420SPImageSource extends FkAbsImageSource {
         return true;
     }
 
-    private native long nativeCreate(FkAbsImageSource instance, ByteBuffer y, ByteBuffer u, ByteBuffer v, int width, int height, int orientation);
+    private native long nativeCreate(FkAbsImageSource instance, ByteBuffer buf, int width, int height);
 
     private native void nativeDestroy(long handle);
 }

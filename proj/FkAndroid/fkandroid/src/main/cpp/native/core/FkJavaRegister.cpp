@@ -19,6 +19,7 @@
 #include "../source/Java_FkYUV420SPImageSource.h"
 #include "../source/Java_FkCompressedImageSource.h"
 #include "../source/Java_FkNativeTestObject.h"
+#include "../source/Java_FkBitmapSource.h"
 #include "../source/Java_FkSurfaceTextureSource.h"
 
 namespace film_k {
@@ -28,6 +29,7 @@ namespace film_k {
         Java_FkYUV420SPImageSource::reg(env);
         Java_FkCompressedImageSource::reg(env);
         Java_FkNativeTestObject::reg(env);
+        Java_FkBitmapSource::reg(env);
         Java_FkSurfaceTextureSource::reg(env);
     }
 }

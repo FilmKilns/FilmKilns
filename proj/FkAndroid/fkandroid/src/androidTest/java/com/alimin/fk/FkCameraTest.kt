@@ -6,7 +6,7 @@ import android.hardware.camera2.CameraManager
 import android.util.Size
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.runner.AndroidJUnit4
-import com.alimin.fk.core.FkAbsImageSource2
+import com.alimin.fk.core.FkAbsImageSource
 import com.alimin.fk.device.FkCamera2
 import com.alimin.fk.engine.FkImage
 import com.alimin.fk.entity.FkCameraFeatures
@@ -37,7 +37,7 @@ class FkCameraTest {
         var cameraLayer = -1
         var cntOfFrame = 0
         camera.let {
-            it.getImageSource().addOnRenderListener(object : FkAbsImageSource2.OnRenderListener{
+            it.getImageSource().addOnRenderListener(object : FkAbsImageSource.OnRenderListener{
                 override fun onCreate() {
                 }
 

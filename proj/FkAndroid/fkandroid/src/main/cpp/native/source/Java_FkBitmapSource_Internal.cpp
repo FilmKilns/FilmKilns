@@ -14,11 +14,11 @@
 * |          CREATE AUTO. DO NOT EDIT          |
 * +--------------------------------------------+
 */
-#include "Java_FkYUV420SPImageSource.h"
+#include "Java_FkBitmapSource.h"
 #include "FkJniDefinition.h"
 #include "FkJavaRuntime.h"
 
-namespace Java_FkYUV420SPImageSource {
+namespace Java_FkBitmapSource {
 
     /**
      * +--------------------------------------------+
@@ -29,8 +29,8 @@ namespace Java_FkYUV420SPImageSource {
         nativeDestroy(env, cls, handle);
     }
 
-    jlong _nativeCreate(JNIEnv *env, jclass cls, jobject instance, jobject y, jobject u, jobject v, jint width, jint height, jint orientation) {
-        return (jlong)nativeCreate(env, cls, instance, y, u, v, width, height, orientation);
+    jlong _nativeCreate(JNIEnv *env, jclass cls, jobject instance, jobject buf, jint width, jint height) {
+        return (jlong)nativeCreate(env, cls, instance, buf, width, height);
     }
 
     /**
@@ -43,13 +43,13 @@ namespace Java_FkYUV420SPImageSource {
         return FkJavaRuntime::jniRegister(env, CLASS_NAME, METHODS, METHODS_NUM);
     }
 
-    const char *CLASS_NAME = "com/alimin/fk/source/FkYUV420SPImageSource";
+    const char *CLASS_NAME = "com/alimin/fk/source/FkBitmapSource";
 
     const int METHODS_NUM = 2;
 
     const JNINativeMethod METHODS[] = {
             {"nativeDestroy", "(J)V", (void *) _nativeDestroy},
-            {"nativeCreate", "(Lcom/alimin/fk/core/FkAbsImageSource;Ljava/nio/ByteBuffer;Ljava/nio/ByteBuffer;Ljava/nio/ByteBuffer;III)J", (void *) _nativeCreate},
+            {"nativeCreate", "(Lcom/alimin/fk/core/FkAbsImageSource;Ljava/nio/ByteBuffer;II)J", (void *) _nativeCreate},
     };
 
 };
