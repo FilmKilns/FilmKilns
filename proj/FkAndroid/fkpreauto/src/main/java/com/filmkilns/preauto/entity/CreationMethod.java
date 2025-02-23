@@ -85,7 +85,7 @@ public class CreationMethod {
             StringBuilder sbSig = new StringBuilder();
             for (int i = 0; i < method.args.size(); ++i) {
                 CreationArg arg = method.args.get(i);
-                sbSig.append(CreationClass.SIG_MAP.get(arg.type).sig);
+                sbSig.append(arg.sig);
                 sb.append(CreationClass.SIG_MAP.get(arg.type).jniType);
                 sb.append(" ");
                 sb.append(arg.name);

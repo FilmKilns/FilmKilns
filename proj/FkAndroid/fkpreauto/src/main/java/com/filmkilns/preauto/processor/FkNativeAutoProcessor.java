@@ -97,6 +97,7 @@ public class FkNativeAutoProcessor extends FkAbsProcessor {
     }
 
     private void generateHeader(CreationClass item, File file) {
+        logI(TAG, item.name + ": generateHeader");
         if (file.exists()) {
             file.delete();
         }
@@ -112,6 +113,7 @@ public class FkNativeAutoProcessor extends FkAbsProcessor {
     }
 
     private void generateCPP(CreationClass item, File file) {
+        logI(TAG, item.name + ": generateCPP");
         if (file.exists()) {
             file.delete();
         }

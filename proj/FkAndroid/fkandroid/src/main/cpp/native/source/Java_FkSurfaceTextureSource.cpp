@@ -14,11 +14,6 @@
 
 namespace Java_FkSurfaceTextureSource {
 
-    /**
-     * +----------------------------------------+
-     * |  START of public interface. NEED IMPL  |
-     * +----------------------------------------+
-     */
     void nativeDestroy(JNIEnv *env, jclass cls, int64_t handle) {
         FkInstanceHolder::getInstance().release(handle);
     }

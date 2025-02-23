@@ -212,7 +212,7 @@ public class FkSurfaceTextureSource extends FkAbsImageSource2 {
         return true;
     }
 
-    private native long nativeCreateSurface(Object instance);
+    private native long nativeCreateSurface(FkAbsImageSource2 instance);
 
     private native void nativeDestroy(long handle);
 }

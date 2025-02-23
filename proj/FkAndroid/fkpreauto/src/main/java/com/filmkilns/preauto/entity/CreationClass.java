@@ -56,35 +56,36 @@ public class CreationClass {
                 '}';
     }
 
+    public static String getCanonicalName(com.sun.tools.javac.code.Type type) {
+        return type.toString().replaceAll("<.*>", "");
+    }
+
     public static Class<?> getClassFromType(com.sun.tools.javac.code.Type type) {
-        String className = type.toString().replaceAll("<.*>", "");
-        try {
-            if (className.equals("boolean")) {
-                return boolean.class;
-            } else if (className.equals("byte")) {
-                return byte.class;
-            } else if (className.equals("char")) {
-                return char.class;
-            } else if (className.equals("short")) {
-                return short.class;
-            } else if (className.equals("int")) {
-                return int.class;
-            } else if (className.equals("long")) {
-                return long.class;
-            } else if (className.equals("float")) {
-                return float.class;
-            } else if (className.equals("double")) {
-                return double.class;
-            } else if (className.equals("void")) {
-                return void.class;
-            } else if (className.equals("byte[]")) {
-                return byte[].class;
-            }
-            return Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return Object.class;
+        String className = getCanonicalName(type);
+        if (className.equals("boolean")) {
+            return boolean.class;
+        } else if (className.equals("byte")) {
+            return byte.class;
+        } else if (className.equals("char")) {
+            return char.class;
+        } else if (className.equals("short")) {
+            return short.class;
+        } else if (className.equals("int")) {
+            return int.class;
+        } else if (className.equals("long")) {
+            return long.class;
+        } else if (className.equals("float")) {
+            return float.class;
+        } else if (className.equals("double")) {
+            return double.class;
+        } else if (className.equals("void")) {
+            return void.class;
+        } else if (className.equals("byte[]")) {
+            return byte[].class;
+        } else if (className.equals("java.lang.String")) {
+            return String.class;
         }
+        return Object.class;
     }
 
     public final static Map<Class<?>, Type> SIG_MAP = Map.ofEntries(
