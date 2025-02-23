@@ -98,7 +98,7 @@ public class CreationClass {
             Map.entry(double.class, new Type(double.class, "jdouble", "D", "double")),
             Map.entry(void.class, new Type(void.class, "void", "V", "void")),
             Map.entry(String.class, new Type(String.class, "jstring", "Ljava/lang/String;", "const std::shared_ptr<FkJString> &")),
-            Map.entry(Object.class, new Type(Object.class, "jobject", "Ljava/lang/Object;", "std::any")),
+            Map.entry(Object.class, new Type(Object.class, "jobject", "Ljava/lang/Object;", "jobject")),
             Map.entry(byte[].class, new Type(byte[].class, "jbyteArray", "[B", "const std::shared_ptr<FkJBuffer> &"))
     );
 }
