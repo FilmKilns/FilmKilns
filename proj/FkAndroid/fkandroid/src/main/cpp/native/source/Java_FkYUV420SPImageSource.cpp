@@ -12,12 +12,10 @@
 #include "FkYUV420SPImageSource.h"
 
 namespace Java_FkYUV420SPImageSource {
+#ifdef __cplusplus
+    extern "C" {
+#endif
 
-    /**
-     * +----------------------------------------+
-     * |  START of public interface. NEED IMPL  |
-     * +----------------------------------------+
-     */
     void nativeDestroy(JNIEnv *env, jclass cls, int64_t handle) {
         FkInstanceHolder::getInstance().release(handle);
     }
@@ -56,4 +54,8 @@ namespace Java_FkYUV420SPImageSource {
         }
         return 0;
     }
+
+#ifdef __cplusplus
+}
+#endif
 }

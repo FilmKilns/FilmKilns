@@ -19,6 +19,9 @@
 #include <any>
 
 namespace Java_FkImage {
+#ifdef __cplusplus
+extern "C" {
+#endif
 
     /**
      * +----------------------------------------+
@@ -138,4 +141,7 @@ namespace Java_FkImage {
 
     extern const JNINativeMethod METHODS[22];
 
+#ifdef __cplusplus
+}
+#endif
 };

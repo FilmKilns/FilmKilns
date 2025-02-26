@@ -19,6 +19,9 @@
 #include "FkJavaRuntime.h"
 
 namespace Java_FkImage {
+#ifdef __cplusplus
+    extern "C" {
+#endif
 
     /**
      * +--------------------------------------------+
@@ -152,4 +155,7 @@ namespace Java_FkImage {
             {"nativeCreateInstance", "(Ljava/lang/String;)J", (void *) _nativeCreateInstance},
     };
 
+#ifdef __cplusplus
+    }
+#endif
 };

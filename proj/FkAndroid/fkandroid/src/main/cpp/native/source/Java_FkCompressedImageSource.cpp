@@ -12,6 +12,9 @@
 #include "FkCompressedImageSource.h"
 
 namespace Java_FkCompressedImageSource {
+#ifdef __cplusplus
+    extern "C" {
+#endif
 
     void nativeDestroy(JNIEnv *env, jclass cls, int64_t handle) {
         FkInstanceHolder::getInstance().release(handle);
@@ -23,4 +26,7 @@ namespace Java_FkCompressedImageSource {
         auto source = std::make_shared<FkCompressedImageSource>(instance, FkBitmap::from(_buf), (FkEncodedOrigin) orientation);
         return FkInstanceHolder::getInstance().put(std::dynamic_pointer_cast<FkAbsImageSource>(source));
     }
+#ifdef __cplusplus
+}
+#endif
 }

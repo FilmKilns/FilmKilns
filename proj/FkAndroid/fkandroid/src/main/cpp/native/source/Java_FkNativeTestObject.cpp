@@ -10,6 +10,10 @@
 
 #include "Java_FkNativeTestObject.h"
 namespace Java_FkNativeTestObject {
+#ifdef __cplusplus
+    extern "C" {
+#endif
+
     int32_t nativeDestroy(JNIEnv *env, jclass cls, int64_t handle) {
         return 0;
     }
@@ -57,4 +61,7 @@ namespace Java_FkNativeTestObject {
     bool nativeGetBool(JNIEnv *env, jclass cls, bool val) {
         return val;
     }
+#ifdef __cplusplus
+}
+#endif
 }

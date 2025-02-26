@@ -19,6 +19,9 @@
 #include <any>
 
 namespace Java_FkBitmapSource {
+#ifdef __cplusplus
+extern "C" {
+#endif
 
     /**
      * +----------------------------------------+
@@ -58,4 +61,7 @@ namespace Java_FkBitmapSource {
 
     extern const JNINativeMethod METHODS[2];
 
+#ifdef __cplusplus
+}
+#endif
 };

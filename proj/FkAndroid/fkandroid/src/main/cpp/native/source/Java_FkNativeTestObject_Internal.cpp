@@ -19,6 +19,9 @@
 #include "FkJavaRuntime.h"
 
 namespace Java_FkNativeTestObject {
+#ifdef __cplusplus
+    extern "C" {
+#endif
 
     /**
      * +--------------------------------------------+
@@ -102,4 +105,7 @@ namespace Java_FkNativeTestObject {
             {"nativeCreate", "(ZBCSIJFDLjava/lang/String;Ljava/lang/Object;[B)J", (void *) _nativeCreate},
     };
 
+#ifdef __cplusplus
+    }
+#endif
 };

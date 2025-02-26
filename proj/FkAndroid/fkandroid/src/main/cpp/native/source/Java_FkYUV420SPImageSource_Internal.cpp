@@ -19,6 +19,9 @@
 #include "FkJavaRuntime.h"
 
 namespace Java_FkYUV420SPImageSource {
+#ifdef __cplusplus
+    extern "C" {
+#endif
 
     /**
      * +--------------------------------------------+
@@ -52,4 +55,7 @@ namespace Java_FkYUV420SPImageSource {
             {"nativeCreate", "(Lcom/alimin/fk/core/FkAbsImageSource;Ljava/nio/ByteBuffer;Ljava/nio/ByteBuffer;Ljava/nio/ByteBuffer;III)J", (void *) _nativeCreate},
     };
 
+#ifdef __cplusplus
+    }
+#endif
 };

@@ -19,6 +19,9 @@
 #include "FkJavaRuntime.h"
 
 namespace Java_FkBitmapSource {
+#ifdef __cplusplus
+    extern "C" {
+#endif
 
     /**
      * +--------------------------------------------+
@@ -52,4 +55,7 @@ namespace Java_FkBitmapSource {
             {"nativeCreate", "(Lcom/alimin/fk/core/FkAbsImageSource;Ljava/nio/ByteBuffer;II)J", (void *) _nativeCreate},
     };
 
+#ifdef __cplusplus
+    }
+#endif
 };

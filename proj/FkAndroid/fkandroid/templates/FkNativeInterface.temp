@@ -19,6 +19,9 @@
 \#include <any>
 
 namespace Java_${className} {
+#ifdef __cplusplus
+extern "C" {
+#endif
 
     /**
      * +----------------------------------------+
@@ -58,4 +61,7 @@ namespace Java_${className} {
 
     extern const JNINativeMethod METHODS[${classMethodCnt}];
 
+#ifdef __cplusplus
+}
+#endif
 };
