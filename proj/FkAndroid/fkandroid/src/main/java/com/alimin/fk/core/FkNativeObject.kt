@@ -42,6 +42,15 @@ abstract class FkNativeObject {
         }
     }
 
+    fun withInt(task: (handle: Long) -> Int): FkResult {
+        synchronized(this) {
+            if (isNull()) {
+                return FkResult.INVALID_DATA
+            }
+            return FkResult(task(handle))
+        }
+    }
+
     protected fun finalize() {
         destroy()
     }

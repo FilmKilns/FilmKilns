@@ -1,6 +1,6 @@
 package com.alimin.fk.entity
 
-class FkResult(val code: Int, val msg: String = "") {
+class FkResult(val code: Int, val msg: String) {
     companion object {
         val OK = FkResult(0, "Success")
         val SUCCESS_END = FkResult(999, "Success end flag")
@@ -26,6 +26,8 @@ class FkResult(val code: Int, val msg: String = "") {
         val INFO_CAMERA_FILL_ALL_FEATURES_FINISH = FkResult(1003, "Fill all features finish")
         val INFO_END = FkResult(9999, "Info end flag")
     }
+
+    constructor(code: Int) : this(code, if (code == OK.code) OK.msg else FAIL.msg) {}
 
     fun isSuccess(): Boolean = (this.code >= OK.code && this.code < SUCCESS_END.code)
 
