@@ -248,7 +248,7 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
                 }
 
             }
-            captureSession = if (cameraSettings.reqFeatures.find { it.equals(FkCameraFeatureKey.SCENE_AUTO_EXT) } != null) {
+            captureSession = if (FkCaptureReqUtils.containsFeatureKey(curFeatures, cameraSettings, FkCameraFeatureKey.SCENE_AUTO_EXT)) {
                 FkLogcat.i(TAG, "Create ext session")
                 FkCameraExtSession(cameraDevice, surfaces, handler, callback)
             } else {
@@ -274,6 +274,7 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
                 if (FkCaptureReqUtils.containsFeatureKey(curFeatures, cameraSettings, FkCameraFeatureKey.AE_MODE_AUTO)) {
                     FkCaptureReqUtils.withAutoRequest(this)
                 } else {
+                    FkLogcat.i(TAG, "withManualRequest")
                     FkCaptureReqUtils.withManualRequest(this, curFeatures!!.isoRange.lower, 10000000)
                 }
                 set(

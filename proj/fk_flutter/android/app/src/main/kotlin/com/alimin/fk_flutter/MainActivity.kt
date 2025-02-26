@@ -24,6 +24,7 @@ import com.alimin.fk.device.FkCamera2
 import com.alimin.fk.device.OnCaptureListener
 import com.alimin.fk.device.OnInfoListener
 import com.alimin.fk.engine.FkImage
+import com.alimin.fk.entity.FkCameraFeatureKey
 import com.alimin.fk.entity.FkCameraFeatures
 import com.alimin.fk.entity.FkCameraSettings
 import com.alimin.fk.entity.FkResult
@@ -48,7 +49,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Texture
     private var camera: FkAbsCamera? = null
     private var cameraManager: CameraManager? = null
     private val cameraSettings = FkCameraSettings(FkCameraFeatures.kFacing.Front, Size(1080, 1440), Size(3072, 4096)).apply {
-//        reqCameraKeys.add(FkCameraAvailableKey.SCENE_AUTO_EXT)
+        reqFeatures.add(FkCameraFeatureKey.SCENE_AUTO_EXT)
     }
 
     companion object {

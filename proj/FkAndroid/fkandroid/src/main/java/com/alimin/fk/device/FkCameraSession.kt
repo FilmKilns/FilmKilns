@@ -50,6 +50,10 @@ class FkCameraSession(
         }
     }
 
+    override fun abortCaptures() {
+        session?.abortCaptures()
+    }
+
     override fun stopRepeating() {
         session?.stopRepeating()
     }

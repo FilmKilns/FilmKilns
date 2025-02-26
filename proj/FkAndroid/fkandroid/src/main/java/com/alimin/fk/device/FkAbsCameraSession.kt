@@ -17,6 +17,7 @@ interface FkAbsCameraSession {
             result: TotalCaptureResult
         )
     }
+    fun abortCaptures()
     fun stopRepeating()
     fun setRepeatingRequest(request: CaptureRequest, callback: CaptureCallback, handler: Handler)
     fun close()

@@ -59,6 +59,11 @@ class FkCameraExtSession(
         }
     }
 
+
+    override fun abortCaptures() {
+        FkLogcat.i(TAG, "abortCaptures not support.")
+    }
+
     override fun stopRepeating() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             session?.stopRepeating()
