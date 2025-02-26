@@ -1,30 +1,11 @@
 package com.alimin.fk.engine
 
 import androidx.annotation.Keep
+import com.alimin.fk.core.FkNativeObject
+import com.alimin.fk.entity.FkResult
 
 @Keep
-abstract class FkEngine(private var handle: Long) {
-
-    abstract fun onCreateInstance(): Long
-    open fun create() {
-        if (isNull()) {
-            handle = onCreateInstance()
-        }
-    }
-
-    open fun destroy() {}
-    open fun start() {}
-    open fun stop() {}
-
-    protected fun isNull(): Boolean {
-        return 0L == handle
-    }
-
-    open fun getHandle(): Long {
-        return handle
-    }
-
-    protected fun releaseHandle() {
-        handle = 0L
-    }
+abstract class FkEngine : FkNativeObject() {
+    open fun start(): FkResult = FkResult.FAIL
+    open fun stop(): FkResult = FkResult.FAIL
 }
