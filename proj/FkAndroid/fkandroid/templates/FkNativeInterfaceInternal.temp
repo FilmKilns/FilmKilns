@@ -19,9 +19,6 @@
 \#include "FkJavaRuntime.h"
 
 namespace Java_${className} {
-#ifdef __cplusplus
-    extern "C" {
-#endif
 
     /**
      * +--------------------------------------------+
@@ -58,7 +55,4 @@ namespace Java_${className} {
 #end
     };
 
-#ifdef __cplusplus
-    }
-#endif
 };

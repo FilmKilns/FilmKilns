@@ -130,7 +130,7 @@ namespace Java_FkImage {
     const JNINativeMethod METHODS[] = {
             {"nativeDrawPathFinish", "(JI)I", (void *) _nativeDrawPathFinish},
             {"nativeDrawPath", "(JIII[B)I", (void *) _nativeDrawPath},
-            {"nativeSave", "(JLjava/lang/String;Lcom/alimin/fk/engine/FkNativeMsgListener;)I", (void *) _nativeSave},
+            {"nativeSave", "(JLjava/lang/String;Lcom/alimin/fk/listener/FkNativeMsgListener;)I", (void *) _nativeSave},
             {"nativeCropLayer", "(JIIIII)I", (void *) _nativeCropLayer},
             {"nativeCrop", "(JIIII)I", (void *) _nativeCrop},
             {"nativeDrawPoint", "(JIJIII)I", (void *) _nativeDrawPoint},

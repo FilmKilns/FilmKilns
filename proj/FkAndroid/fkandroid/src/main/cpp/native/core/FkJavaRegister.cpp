@@ -21,6 +21,7 @@
 #include "../source/Java_FkNativeTestObject.h"
 #include "../source/Java_FkBitmapSource.h"
 #include "../source/Java_FkSurfaceTextureSource.h"
+#include "../engine/Java_FkImageModel.h"
 #include "../engine/Java_FkImage.h"
 
 namespace film_k {
@@ -32,6 +33,7 @@ namespace film_k {
         Java_FkNativeTestObject::reg(env);
         Java_FkBitmapSource::reg(env);
         Java_FkSurfaceTextureSource::reg(env);
+        Java_FkImageModel::reg(env);
         Java_FkImage::reg(env);
     }
 }

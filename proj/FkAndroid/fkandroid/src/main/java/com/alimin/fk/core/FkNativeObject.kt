@@ -51,6 +51,15 @@ abstract class FkNativeObject {
         }
     }
 
+    fun withLong(task: (handle: Long) -> Long): Long {
+        synchronized(this) {
+            if (isNull()) {
+                return 0L
+            }
+            return task(handle)
+        }
+    }
+
     protected fun finalize() {
         destroy()
     }

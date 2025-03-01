@@ -6,16 +6,19 @@ import android.util.Size;
 import android.view.Choreographer;
 import android.view.Surface;
 
+import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
 import com.alimin.fk.core.FkAbsImageSource;
 import com.alimin.fk.core.FkPaint;
 import com.alimin.fk.define.kScaleType;
 import com.alimin.fk.entity.FkResult;
+import com.alimin.fk.listener.FkNativeMsgListener;
 import com.filmkilns.annotation.FkNativeAuto;
 
 import kotlin.jvm.functions.Function1;
 
+@Keep
 @FkNativeAuto(path = "cpp/native/engine")
 public class FkImage extends FkEngine {
     private long _handle = 0L;
@@ -32,31 +35,17 @@ public class FkImage extends FkEngine {
 
     @Override
     public long onNativeCreate() {
-        return nativeCreateInstance(workspace);
+        long handle = nativeCreateInstance(workspace);
+        if (handle != 0) {
+            nativeCreate(handle);
+        }
+        return handle;
     }
 
     @Override
     public boolean onNativeDestroy(long handle) {
         nativeDestroy(handle);
         return true;
-    }
-
-    @Override
-    public FkResult create() {
-        super.create();
-        return with(handle -> {
-            nativeCreate(handle);
-            return FkResult.Companion.getOK();
-        });
-    }
-
-    @Override
-    public FkResult destroy() {
-        super.destroy();
-        return with(handle -> {
-            nativeDestroy(handle);
-            return FkResult.Companion.getOK();
-        });
     }
 
     @Override
