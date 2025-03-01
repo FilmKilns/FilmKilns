@@ -19,9 +19,6 @@
 #include <any>
 
 namespace Java_FkCompressedImageSource {
-#ifdef __cplusplus
-extern "C" {
-#endif
 
     /**
      * +----------------------------------------+
@@ -61,7 +58,4 @@ extern "C" {
 
     extern const JNINativeMethod METHODS[2];
 
-#ifdef __cplusplus
-}
-#endif
 };

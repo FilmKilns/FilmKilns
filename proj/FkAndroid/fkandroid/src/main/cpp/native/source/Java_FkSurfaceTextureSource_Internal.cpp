@@ -19,9 +19,6 @@
 #include "FkJavaRuntime.h"
 
 namespace Java_FkSurfaceTextureSource {
-#ifdef __cplusplus
-    extern "C" {
-#endif
 
     /**
      * +--------------------------------------------+
@@ -55,7 +52,4 @@ namespace Java_FkSurfaceTextureSource {
             {"nativeCreateSurface", "(Lcom/alimin/fk/core/FkAbsImageSource;)J", (void *) _nativeCreateSurface},
     };
 
-#ifdef __cplusplus
-    }
-#endif
 };

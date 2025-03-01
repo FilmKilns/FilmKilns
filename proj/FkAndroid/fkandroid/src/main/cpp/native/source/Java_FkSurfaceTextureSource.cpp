@@ -13,9 +13,6 @@
 #include "FkSurfaceTextureSource.h"
 
 namespace Java_FkSurfaceTextureSource {
-#ifdef __cplusplus
-    extern "C" {
-#endif
 
     void nativeDestroy(JNIEnv *env, jclass cls, int64_t handle) {
         FkInstanceHolder::getInstance().release(handle);
@@ -26,7 +23,4 @@ namespace Java_FkSurfaceTextureSource {
         return FkInstanceHolder::getInstance().put(source);
     }
 
-#ifdef __cplusplus
-}
-#endif
 }

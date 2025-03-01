@@ -19,9 +19,6 @@
 #include <any>
 
 namespace Java_FkNativeTestObject {
-#ifdef __cplusplus
-extern "C" {
-#endif
 
     /**
      * +----------------------------------------+
@@ -101,7 +98,4 @@ extern "C" {
 
     extern const JNINativeMethod METHODS[12];
 
-#ifdef __cplusplus
-}
-#endif
 };

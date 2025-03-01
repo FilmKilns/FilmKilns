@@ -24,9 +24,6 @@
 using namespace com::alimin::fk;
 
 namespace Java_FkImage {
-#ifdef __cplusplus
-    extern "C" {
-#endif
 
     int32_t nativeDrawPathFinish(JNIEnv *env, jclass cls, int64_t handle, int32_t layerId) {
         return FK_FAIL;
@@ -339,7 +336,4 @@ namespace Java_FkImage {
 //    return engine->drawPathFinish(layerId);
 //}
 
-#ifdef __cplusplus
-    }
-#endif
 }

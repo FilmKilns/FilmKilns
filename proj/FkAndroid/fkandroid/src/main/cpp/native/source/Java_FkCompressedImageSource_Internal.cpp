@@ -19,9 +19,6 @@
 #include "FkJavaRuntime.h"
 
 namespace Java_FkCompressedImageSource {
-#ifdef __cplusplus
-    extern "C" {
-#endif
 
     /**
      * +--------------------------------------------+
@@ -55,7 +52,4 @@ namespace Java_FkCompressedImageSource {
             {"nativeCreate", "(Lcom/alimin/fk/core/FkAbsImageSource;Ljava/nio/ByteBuffer;I)J", (void *) _nativeCreate},
     };
 
-#ifdef __cplusplus
-    }
-#endif
 };
