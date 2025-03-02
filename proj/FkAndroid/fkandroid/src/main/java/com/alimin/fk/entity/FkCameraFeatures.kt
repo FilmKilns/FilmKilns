@@ -72,7 +72,7 @@ class FkCameraFeatures(val id: String, cc: CameraCharacteristics, ccExt: CameraE
     val maxAERegions: Int
     val maxAFRegions: Int
     private var map: StreamConfigurationMap? = null
-    private val sizeMap: MutableMap<Any, Array<Size>> = HashMap()
+    private val sizeMap: MutableMap<Any, List<Size>> = HashMap()
     private var filled = false
     val availableKeys = ArrayList<FkCameraFeatureKey>()
 
@@ -227,7 +227,7 @@ class FkCameraFeatures(val id: String, cc: CameraCharacteristics, ccExt: CameraE
             if (StreamConfigurationMap.isOutputSupportedFor(cls)) {
                 val sizes = map!!.getOutputSizes(cls)
                 if (sizes != null) {
-                    sizeMap[cls] = sizes
+                    sizeMap[cls] = sizes.asList()
                     FkLogcat.i(TAG, "format=${cls.name}: ${sizes.contentToString()}")
                 } else {
                     FkLogcat.w(TAG,  "format=${cls.name} sizes is empty.")
@@ -237,12 +237,12 @@ class FkCameraFeatures(val id: String, cc: CameraCharacteristics, ccExt: CameraE
         }
         if (map!!.isOutputSupportedFor(format)) {
             val sizes: Array<Size> = map!!.getOutputSizes(format)
-            sizeMap[format] = sizes
+            sizeMap[format] = sizes.asList()
             FkLogcat.i(TAG,  "format=${format}: ${sizes.contentToString()}")
         }
     }
 
-    fun getSizesFor(format: Int): Array<Size>? {
+    fun getSizesFor(format: Int): List<Size>? {
         return if (sizeMap.containsKey(format)) {
             sizeMap[format]
         } else null

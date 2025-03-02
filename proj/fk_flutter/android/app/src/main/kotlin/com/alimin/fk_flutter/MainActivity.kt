@@ -2,17 +2,22 @@ package com.alimin.fk_flutter
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.SurfaceTexture
+import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
+import android.util.Size
 import android.view.Surface
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
+import android.view.WindowMetrics
 import android.widget.FrameLayout
 import android.widget.Toast
 import com.alimin.fk.FilmKilns
-import com.alimin.fk.engine.FkImage
 import com.alimin.fk.entity.FkResult
 import com.alimin.fk.utils.FkLogcat
 import com.alimin.fk_flutter.channels.CameraChannel
@@ -56,7 +61,7 @@ class MainActivity : FlutterActivity(), ImageContract.View, TextureView.SurfaceT
         if (!workspace.exists()) {
             workspace.mkdirs()
         }
-        ImagePresenter(this, workspace.absolutePath)
+        ImagePresenter(this, workspace.absolutePath, getScreenResolution())
         presenter.create()
         flutterEngine?.apply {
             cameraChannel = CameraChannel(dartExecutor, applicationContext, presenter)
@@ -87,9 +92,21 @@ class MainActivity : FlutterActivity(), ImageContract.View, TextureView.SurfaceT
         super.setContentView(container)
     }
 
-    private fun detachWindow(engine: FkImage) {
-        surfaceContainer.removeView(renderView)
-        renderView = null
+    private fun getScreenResolution(): Size {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowMetrics: WindowMetrics = windowManager.currentWindowMetrics
+            val windowInsets: WindowInsets = windowMetrics.getWindowInsets()
+            val bounds: Rect = windowMetrics.getBounds()
+            val width = bounds.width()
+            val height = bounds.height()
+            return Size(width, height)
+        } else {
+            val displayMetrics = DisplayMetrics()
+            windowManager.defaultDisplay.getMetrics(displayMetrics)
+            val width = displayMetrics.widthPixels
+            val height = displayMetrics.heightPixels
+            return Size(width, height)
+        }
     }
 
     override fun onSurfaceTextureAvailable(p0: SurfaceTexture, width: Int, height: Int) {

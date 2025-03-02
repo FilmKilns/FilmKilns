@@ -35,6 +35,7 @@ import java.nio.ByteBuffer
 class ImagePresenter(
     private val view: ImageContract.View,
     workspace: String,
+    private val screenSize: Size,
     private val model: ImageEngineModel = ImageEngineModelImpl()
 ) : ImageContract.Presenter(), OnInfoListener {
     private val cacheFile: File
@@ -49,19 +50,31 @@ class ImagePresenter(
     private var captureLayer = -1
     private var camera: FkAbsCamera? = null
     private var cameraManager: CameraManager? = null
-    private val cameraSettings = FkCameraSettings(FkCameraFeatures.kFacing.Front, Size(1080, 1440), Size(3072, 4096)).apply {
-        reqFeatures.add(FkCameraFeatureKey.SCENE_AUTO_EXT)
-    }
-
-    companion object {
-        const val TAG = "ImagePresenter"
-    }
+    private val cameraSettings: FkCameraSettings
 
     init {
         view.presenter = this
+        cameraSettings = createCameraSettings()
         cacheFile = File(File(workspace), "/${System.currentTimeMillis()}.fkp.dir")
         engine = FkImage(cacheFile.absolutePath)
         modelEngine = FkImageModel(engine)
+    }
+
+    private fun createCameraSettings(): FkCameraSettings {
+        return FkCameraSettings(
+            FkCameraFeatures.kFacing.Front,
+            getFitScreenSize(screenSize, FkRational(3, 4)),
+            Size(3072, 4096)
+        ).apply {
+            reqFeatures.add(FkCameraFeatureKey.SCENE_AUTO_EXT)
+        }
+    }
+
+    private fun getFitScreenSize(size: Size, r: FkRational): Size {
+        if (size.width / size.height > r.num / r.den) {
+            return Size(size.height * r.num / r.den, size.height)
+        }
+        return Size(size.width, size.width * r.den / r.num)
     }
 
     private fun notifyLayers() {
