@@ -30,6 +30,9 @@ FkEntity::~FkEntity() {
 FkResult FkEntity::addComponent(const std::shared_ptr<FkComponent> &comp) {
     FkAssert(comp != nullptr, FK_NPE);
     components[comp->getClassType().getId()] = comp;
+#if defined(__FK_DEBUG__)
+    toString();
+#endif
     return FK_OK;
 }
 
@@ -37,6 +40,9 @@ FkResult FkEntity::addComponents(const std::vector<std::shared_ptr<FkComponent>>
     for (auto &compo: vec) {
         addComponent(compo);
     }
+#if defined(__FK_DEBUG__)
+    toString();
+#endif
     return FK_OK;
 }
 
@@ -61,4 +67,15 @@ FkResult FkEntity::copyComponentFrom(const std::shared_ptr<FkEntity> &src, const
         return addComponent(compo);
     }
     return FK_SOURCE_NOT_FOUND;
+}
+
+std::string FkEntity::toString() {
+    desc.clear();
+    desc.append("[");
+    for (auto &itr: components) {
+        desc.append(itr.second->getClassType().getName());
+        desc.append(",");
+    }
+    desc.append("]");
+    return desc;
 }

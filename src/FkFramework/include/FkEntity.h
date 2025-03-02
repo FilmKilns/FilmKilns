@@ -47,8 +47,11 @@ public:
 
     FkResult copyComponentFrom(const std::shared_ptr<FkEntity> &src, const FkClassType &classType);
 
+    virtual std::string toString() override;
+
 private:
     std::map<size_t, std::shared_ptr<FkComponent>> components;
+    std::string desc = "";
 };
 
 #endif //FK_FRAMEWORK_FKENTITY_H
