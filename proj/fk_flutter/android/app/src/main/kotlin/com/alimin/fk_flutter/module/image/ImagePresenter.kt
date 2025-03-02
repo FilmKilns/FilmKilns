@@ -256,6 +256,10 @@ class ImagePresenter(
         })
     }
 
+    override fun savePicture() {
+        save("/sdcard/DCIM/Camera/IMG_${System.currentTimeMillis()}_fk.jpg")
+    }
+
     override fun save() {
         modelEngine.save(cacheFile.absolutePath)
     }

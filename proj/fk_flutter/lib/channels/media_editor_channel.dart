@@ -7,7 +7,7 @@ const _mediaEditorMethodChannel =
     MethodChannel("com.alimin.flutter/media_editor");
 
 class MediaEditorChannel {
-  List<Function(int, String)> onInfoListeners = [];
+  List<Function(int, String)> _onInfoListeners = [];
   MediaEditorChannel() {
     _mediaEditorMethodChannel.setMethodCallHandler((call) {
       Logcat.debug("Flutter setMethodCallHandler ${call.method}");
@@ -19,17 +19,21 @@ class MediaEditorChannel {
   }
 
   void _onDeliveryInfo(int code, String msg) {
-    for (Function(int, String) l in onInfoListeners) {
+    for (Function(int, String) l in _onInfoListeners) {
       l(code, msg);
     }
   }
 
   void addOnInfoListener(Function(int, String) l) {
-    onInfoListeners.add(l);
+    _onInfoListeners.add(l);
   }
 
   void removeOnInfoListener(Function(int, String) l) {
-    onInfoListeners.remove(l);
+    _onInfoListeners.remove(l);
+  }
+
+  Future<int> savePicture() {
+    return _invokeMethod("savePicture", null);
   }
 
   Future<int> attachWindow(Pointer<Void> handle) {

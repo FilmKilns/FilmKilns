@@ -104,16 +104,15 @@ class _CameraShotPageState extends State<CameraShotPage>
           child: IconButton(
             onPressed: () {
               if (_isCaptured()) {
+                _editor.savePicture();
                 // widget._editor.exportFile("/sdcard/DCIM/${widget._editor.getWorkspaceName()}.jpg");
               }
             },
             style: ButtonStyle(
                 padding:
                 WidgetStateProperty.all(const EdgeInsets.all(12))),
-            icon: Icon(
-                !_isCaptured()
-                    ? Icons.cameraswitch_outlined
-                    : Icons.save_alt,
+            icon: const Icon(
+                Icons.save_alt,
                 color: Colors.white),
             iconSize: 40,
           ),

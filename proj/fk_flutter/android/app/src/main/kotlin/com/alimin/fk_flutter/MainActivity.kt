@@ -177,6 +177,7 @@ class MainActivity : FlutterActivity(), ImageContract.View, TextureView.SurfaceT
     }
 
     override fun onImageSaved(file: String) {
+        Toast.makeText(this, "Saved to $file", Toast.LENGTH_LONG).show()
     }
 
     override fun onImageSaving() {
@@ -187,7 +188,7 @@ class MainActivity : FlutterActivity(), ImageContract.View, TextureView.SurfaceT
     }
 
     override fun onPresenterInfo(result: FkResult, arg0 : Any?) {
-        Toast.makeText(this, "${result.code}: ${result.msg}", Toast.LENGTH_LONG).show()
+        FkLogcat.i(TAG, "${result.code}: ${result.msg}")
         when (result.code) {
             FkResult.INFO_CAMERA_TAKE_PICTURE_SUCCESS.code -> {
                 cameraChannel.deliveryInfo(result)

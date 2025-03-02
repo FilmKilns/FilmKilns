@@ -63,6 +63,12 @@ class CameraChannel(
                 return
             }
 
+            "savePicture" -> {
+                presenter.savePicture()
+                result.success(FkResult.OK.code)
+                return
+            }
+
             "openCamera" -> {
                 presenter.openCamera()
                 result.success(FkResult.OK.code)
