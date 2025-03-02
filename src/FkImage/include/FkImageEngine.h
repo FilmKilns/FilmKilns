@@ -32,7 +32,7 @@ public:
 
     FkID newLayerWithFile(std::string path, FkID expectId = FK_ID_NONE);
 
-    FkID save(std::string file, FkResultCallback callback = nullptr);
+    FkID save(FkID layerId, std::string file, FkResultCallback callback = nullptr);
 
 protected:
 

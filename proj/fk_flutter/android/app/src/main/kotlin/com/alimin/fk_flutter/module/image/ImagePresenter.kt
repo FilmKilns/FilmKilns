@@ -236,8 +236,12 @@ class ImagePresenter(
     }
 
     override fun save(file: String) {
+        save(0, file)
+    }
+
+    override fun save(layerId: Int, file: String) {
         view.onImageSaving()
-        engine.save(file, object : FkNativeMsgListener {
+        engine.save(layerId, file, object : FkNativeMsgListener {
             override fun onNativeMsgReceived(
                 what: Int,
                 arg: Int,
@@ -257,7 +261,11 @@ class ImagePresenter(
     }
 
     override fun savePicture() {
-        save("/sdcard/DCIM/Camera/IMG_${System.currentTimeMillis()}_fk.jpg")
+        if (captureLayer > 0) {
+            save(captureLayer, "/sdcard/DCIM/Camera/IMG_${System.currentTimeMillis()}_fk.jpg")
+        } else {
+            view.showError(FkResult.ERR_INVALID_PARAMETERS.code, FkResult.ERR_INVALID_PARAMETERS.msg)
+        }
     }
 
     override fun save() {

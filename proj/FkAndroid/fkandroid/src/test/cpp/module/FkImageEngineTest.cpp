@@ -162,7 +162,7 @@ TEST_F(FkImageEngineTest, WithCanvasMvp) {
     render();
     EXPECT_TRUE(testColor(engine, 396, 497, FkColor::white()));
     EXPECT_TRUE(testColor(engine, 51, 458, FkColor::red()));
-    EXPECT_EQ(engine->save(FK_ANDROID_TEST_TEMP_FILE), FK_OK);
+    EXPECT_EQ(engine->save(0, FK_ANDROID_TEST_TEMP_FILE), FK_OK);
 }
 
 TEST_F(FkImageEngineTest, DrawPath) {

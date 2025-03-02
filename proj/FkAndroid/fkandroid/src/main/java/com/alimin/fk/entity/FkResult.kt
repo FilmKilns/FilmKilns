@@ -16,6 +16,7 @@ class FkResult(val code: Int, val msg: String) {
         val SKIP = FkResult(-6, "Skip")
         val NPE = FkResult(-7, "Null pointer error")
         val FILE_NOT_FOUND = FkResult(-8, "File not found")
+        val ERR_INVALID_PARAMETERS = FkResult(-10, "Invalid parameters")
         val ERROR_END = FkResult(-999, "Error end flag")
 
         /**

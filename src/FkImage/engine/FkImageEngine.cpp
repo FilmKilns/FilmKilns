@@ -118,8 +118,9 @@ FkResult FkImageEngine::_updateLayerWithSource(const std::shared_ptr<FkMessage> 
     return FkLayerEngine::_updateLayerWithSource(msg);
 }
 
-FkID FkImageEngine::save(std::string file, FkResultCallback callback) {
+FkID FkImageEngine::save(FkID layerId, std::string file, FkResultCallback callback) {
     auto msg = FkMessage::obtain(FK_WRAP_FUNC(FkImageEngine::_save));
+    msg->arg1 = layerId;
     msg->arg3 = file;
     msg->sp = callback ? std::make_shared<FkAnyCompo>(callback) : nullptr;
     return sendMessage(msg);
@@ -127,7 +128,7 @@ FkID FkImageEngine::save(std::string file, FkResultCallback callback) {
 
 FkResult FkImageEngine::_save(std::shared_ptr<FkMessage> &msg) {
     auto proto = std::make_shared<FkReadPixelsProto>();
-    proto->layerId = Fk_CANVAS_ID;
+    proto->layerId = msg->arg1;
     auto ret = getClient()->with(getMolecule())->send(proto);
     if (FK_OK == ret) {
         if (proto->buf == nullptr) {

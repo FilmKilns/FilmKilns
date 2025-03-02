@@ -52,7 +52,7 @@ namespace Java_FkImage {
         return engine->drawPath(layerId, x, y, paint);
     }
 
-    int32_t nativeSave(JNIEnv *env, jclass cls, int64_t handle,
+    int32_t nativeSave(JNIEnv *env, jclass cls, int64_t handle, int32_t layerId,
                        const std::shared_ptr<FkJString> &file, jobject listener) {
         auto engine = castHandle(handle);
         Fk_CHECK_NULL(engine);
@@ -64,7 +64,7 @@ namespace Java_FkImage {
             }
         };
         auto _file = file->cVal();
-        auto ret = engine->save(_file, callback);
+        auto ret = engine->save(layerId, _file, callback);
         return ret;
     }
 

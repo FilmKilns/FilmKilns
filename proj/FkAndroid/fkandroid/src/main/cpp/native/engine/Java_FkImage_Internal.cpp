@@ -33,8 +33,8 @@ namespace Java_FkImage {
         return (jint)nativeDrawPath(env, cls, handle, layerId, x, y, FkJBuffer::create(env, paintData));
     }
 
-    jint _nativeSave(JNIEnv *env, jclass cls, jlong handle, jstring file, jobject listener) {
-        return (jint)nativeSave(env, cls, handle, FkJString::create(env, file), listener);
+    jint _nativeSave(JNIEnv *env, jclass cls, jlong handle, jint layerId, jstring file, jobject listener) {
+        return (jint)nativeSave(env, cls, handle, layerId, FkJString::create(env, file), listener);
     }
 
     jint _nativeCropLayer(JNIEnv *env, jclass cls, jlong handle, jint layerId, jint left, jint top, jint right, jint bottom) {
@@ -130,7 +130,7 @@ namespace Java_FkImage {
     const JNINativeMethod METHODS[] = {
             {"nativeDrawPathFinish", "(JI)I", (void *) _nativeDrawPathFinish},
             {"nativeDrawPath", "(JIII[B)I", (void *) _nativeDrawPath},
-            {"nativeSave", "(JLjava/lang/String;Lcom/alimin/fk/listener/FkNativeMsgListener;)I", (void *) _nativeSave},
+            {"nativeSave", "(JILjava/lang/String;Lcom/alimin/fk/listener/FkNativeMsgListener;)I", (void *) _nativeSave},
             {"nativeCropLayer", "(JIIIII)I", (void *) _nativeCropLayer},
             {"nativeCrop", "(JIIII)I", (void *) _nativeCrop},
             {"nativeDrawPoint", "(JIJIII)I", (void *) _nativeDrawPoint},

@@ -29,7 +29,7 @@ namespace Java_FkImage {
 
     int32_t nativeDrawPath(JNIEnv *env, jclass cls, int64_t handle, int32_t layerId, int32_t x, int32_t y, const std::shared_ptr<FkJBuffer> & paintData);
 
-    int32_t nativeSave(JNIEnv *env, jclass cls, int64_t handle, const std::shared_ptr<FkJString> & file, jobject listener);
+    int32_t nativeSave(JNIEnv *env, jclass cls, int64_t handle, int32_t layerId, const std::shared_ptr<FkJString> & file, jobject listener);
 
     int32_t nativeCropLayer(JNIEnv *env, jclass cls, int64_t handle, int32_t layerId, int32_t left, int32_t top, int32_t right, int32_t bottom);
 
@@ -84,7 +84,7 @@ namespace Java_FkImage {
 
     jint _nativeDrawPath(JNIEnv *env, jclass cls, jlong handle, jint layerId, jint x, jint y, jbyteArray paintData);
 
-    jint _nativeSave(JNIEnv *env, jclass cls, jlong handle, jstring file, jobject listener);
+    jint _nativeSave(JNIEnv *env, jclass cls, jlong handle, jint layerId, jstring file, jobject listener);
 
     jint _nativeCropLayer(JNIEnv *env, jclass cls, jlong handle, jint layerId, jint left, jint top, jint right, jint bottom);
 

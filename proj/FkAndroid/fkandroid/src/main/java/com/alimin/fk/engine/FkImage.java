@@ -176,8 +176,8 @@ public class FkImage extends FkEngine {
         return withInt(handle -> nativeCropLayer(handle, layerId, leftTop.x, leftTop.y, rightBottom.x, rightBottom.y));
     }
 
-    public FkResult save(String file, FkNativeMsgListener listener) {
-        return withInt(handle -> nativeSave(handle, file, listener));
+    public FkResult save(int layerId, String file, FkNativeMsgListener listener) {
+        return withInt(handle -> nativeSave(handle, layerId, file, listener));
     }
 
     public FkResult drawPath(int layerId, int x, int y, FkPaint paint) {
@@ -232,7 +232,7 @@ public class FkImage extends FkEngine {
 
     private native int nativeCropLayer(long handle, int layerId, int left, int top, int right, int bottom);
 
-    private native int nativeSave(long handle, String file, FkNativeMsgListener listener);
+    private native int nativeSave(long handle, int layerId, String file, FkNativeMsgListener listener);
 
     private native int nativeDrawPath(long handle, int layerId, int x, int y, byte[] paintData);
 
