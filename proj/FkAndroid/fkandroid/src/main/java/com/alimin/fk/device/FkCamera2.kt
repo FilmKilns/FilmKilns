@@ -104,7 +104,8 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
             previewSize = curFeatures!!.getBestSize(
                 settings.previewSize.height,
                 settings.previewSize.width,
-                SurfaceTexture::class.java
+                SurfaceTexture::class.java,
+                if (isRequestCamExtension()) "ext" else ""
             )
             if (curFeatures!!.facing == FkCameraFeatures.kFacing.Back) {
                 surfaceSource.setScale(-1f, 1f)
@@ -230,6 +231,8 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
         captureSession = null
     }
 
+    private fun isRequestCamExtension(): Boolean = FkCaptureReqUtils.containsFeatureKey(curFeatures, cameraSettings, FkCameraFeatureKey.SCENE_AUTO_EXT)
+
     private fun openCaptureSession() {
         FkLogcat.i(TAG, "openCaptureSession")
         surfaceSource.allocBuffer()
@@ -251,7 +254,7 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
                 }
 
             }
-            captureSession = if (FkCaptureReqUtils.containsFeatureKey(curFeatures, cameraSettings, FkCameraFeatureKey.SCENE_AUTO_EXT)) {
+            captureSession = if (isRequestCamExtension()) {
                 FkLogcat.i(TAG, "Create ext session")
                 FkCameraExtSession(cameraDevice, surfaces, handler, callback)
             } else {
@@ -337,13 +340,15 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
         val jpegSize = curFeatures!!.getBestSize(
             cameraSettings.pictureSize.height,
             cameraSettings.pictureSize.width,
-            ImageFormat.JPEG
+            ImageFormat.JPEG,
+            if (isRequestCamExtension()) "ext" else ""
         )
         val yuvSize = if (curFeatures!!.isOutputSupportedFor(ImageFormat.YUV_420_888)) {
             curFeatures!!.getBestSize(
                 cameraSettings.pictureSize.height,
                 cameraSettings.pictureSize.width,
-                ImageFormat.YUV_420_888
+                ImageFormat.YUV_420_888,
+                if (isRequestCamExtension()) "ext" else ""
             )
         } else {
             Size(1, 1)

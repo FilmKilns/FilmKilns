@@ -72,7 +72,7 @@ class FkCameraFeatures(val id: String, cc: CameraCharacteristics, ccExt: CameraE
     val maxAERegions: Int
     val maxAFRegions: Int
     private var map: StreamConfigurationMap? = null
-    private val sizeMap: MutableMap<Any, List<Size>> = HashMap()
+    private val sizeMap: MutableMap<String, List<Size>> = HashMap()
     private var filled = false
     val availableKeys = ArrayList<FkCameraFeatureKey>()
 
@@ -81,11 +81,34 @@ class FkCameraFeatures(val id: String, cc: CameraCharacteristics, ccExt: CameraE
         orientation = cc.get(CameraCharacteristics.SENSOR_ORIENTATION)!!
         map = cc.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
         map?.let {
-            saveSizes(ImageFormat.YUV_420_888, SurfaceTexture::class.java)
-            saveSizes(ImageFormat.YUV_420_888, Surface::class.java)
-            saveSizes(ImageFormat.JPEG, null)
+            addSizes(SurfaceTexture::class.java, ::getOutputSizesFunc)
+            addSizes(Surface::class.java, ::getOutputSizesFunc)
+            addSizes(ImageFormat.JPEG, ::getOutputSizesFunc)
             if (it.isOutputSupportedFor(ImageFormat.YUV_420_888)) {
-                saveSizes(ImageFormat.YUV_420_888, null)
+                addSizes(ImageFormat.YUV_420_888, ::getOutputSizesFunc)
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ccExt?.let {
+                val func: (format: Any) -> Array<Size> = { format: Any ->
+                    if (format is Int) {
+                        it.getExtensionSupportedSizes(
+                            CameraExtensionCharacteristics.EXTENSION_AUTOMATIC,
+                            format
+                        ).toTypedArray()
+                    } else if (format is Class<*>) {
+                        it.getExtensionSupportedSizes(
+                            CameraExtensionCharacteristics.EXTENSION_AUTOMATIC,
+                            format
+                        ).toTypedArray()
+                    } else {
+                        emptyArray()
+                    }
+                }
+                addSizes(SurfaceTexture::class.java, func, "ext")
+                addSizes(Surface::class.java, func, "ext")
+                addSizes(ImageFormat.JPEG, func, "ext")
+                addSizes(ImageFormat.YUV_420_888, func, "ext")
             }
         }
         outputFormats = map!!.outputFormats
@@ -222,29 +245,48 @@ class FkCameraFeatures(val id: String, cc: CameraCharacteristics, ccExt: CameraE
         return isSupported
     }
 
-    private fun saveSizes(format: Int, cls: Class<*>?) {
-        if (cls != null) {
-            if (StreamConfigurationMap.isOutputSupportedFor(cls)) {
-                val sizes = map!!.getOutputSizes(cls)
-                if (sizes != null) {
-                    sizeMap[cls] = sizes.asList()
-                    FkLogcat.i(TAG, "format=${cls.name}: ${sizes.contentToString()}")
-                } else {
-                    FkLogcat.w(TAG,  "format=${cls.name} sizes is empty.")
-                }
-            }
-            return
+    private fun getSizeKey(format: Any, flag: String): String {
+        if (format is Int && map!!.isOutputSupportedFor(format)) {
+            return "${format}_$flag"
+        } else if (format is Class<*>) {
+            return "${format.simpleName}_$flag"
         }
-        if (map!!.isOutputSupportedFor(format)) {
-            val sizes: Array<Size> = map!!.getOutputSizes(format)
-            sizeMap[format] = sizes.asList()
-            FkLogcat.i(TAG,  "format=${format}: ${sizes.contentToString()}")
+        return "${format.javaClass.simpleName}_$flag"
+    }
+
+    private fun getOutputSizesFunc(format: Any): Array<Size> {
+        return if (format is Int && map!!.isOutputSupportedFor(format)) {
+            map!!.getOutputSizes(format)
+        } else if (format is Class<*>) {
+            map!!.getOutputSizes(format)
+        } else {
+            return emptyArray()
         }
     }
 
-    fun getSizesFor(format: Int): List<Size>? {
-        return if (sizeMap.containsKey(format)) {
-            sizeMap[format]
+    private fun addSizes(format: Any, func: (format: Any) -> Array<Size>, flag: String = "") {
+        val key = getSizeKey(format, flag)
+        if (format is Int && map!!.isOutputSupportedFor(format)) {
+            val sizes: Array<Size> = func(format)
+            sizeMap[key] = sizes.asList()
+            FkLogcat.i(TAG,  "format=${format}: ${sizes.contentToString()}")
+        } else {
+            if (StreamConfigurationMap.isOutputSupportedFor(format as Class<*>)) {
+                val sizes = func(format)
+                if (sizes != null) {
+                    sizeMap[key] = sizes.asList()
+                    FkLogcat.i(TAG, "format=$key: ${sizes.contentToString()}")
+                } else {
+                    FkLogcat.w(TAG,  "format=$key sizes is empty.")
+                }
+            }
+        }
+    }
+
+    fun getSizesFor(format: Any, flag: String): List<Size>? {
+        val key = getSizeKey(format, flag)
+        return if (sizeMap.containsKey(key)) {
+            sizeMap[key]
         } else null
     }
 
@@ -252,10 +294,11 @@ class FkCameraFeatures(val id: String, cc: CameraCharacteristics, ccExt: CameraE
         return map!!.isOutputSupportedFor(format)
     }
 
-    fun getBestSize(width: Int, height: Int, format: Any): Size {
+    fun getBestSize(width: Int, height: Int, format: Any, flag: String): Size {
+        val key = getSizeKey(format, flag)
         var delta = Int.MAX_VALUE
         val size = Point(width, height)
-        val list = sizeMap[format]
+        val list = sizeMap[key]
         list?.forEach {
             if (it.width == width && it.height == height) {
                 return it
