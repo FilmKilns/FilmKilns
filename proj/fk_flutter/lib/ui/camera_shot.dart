@@ -51,10 +51,6 @@ class _CameraShotPageState extends State<CameraShotPage>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
-        Logcat.debug('AppLifecycleState=$state');
-        if (__isCaptured) {
-          _openCamera();
-        }
       case AppLifecycleState.inactive:
       case AppLifecycleState.detached:
       case AppLifecycleState.paused:

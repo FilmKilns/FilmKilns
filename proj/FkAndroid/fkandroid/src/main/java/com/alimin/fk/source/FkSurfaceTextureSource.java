@@ -11,8 +11,8 @@ import androidx.annotation.Nullable;
 
 import com.alimin.fk.core.FkAbsImageSource;
 import com.alimin.fk.entity.FkResult;
-import com.filmkilns.annotation.FkNativeAuto;
 import com.alimin.fk.utils.FkLogcat;
+import com.filmkilns.annotation.FkNativeAuto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -190,10 +190,10 @@ public class FkSurfaceTextureSource extends FkAbsImageSource {
     @NonNull
     @Override
     public int[] getSize() {
-        FkLogcat.i(TAG, String.format("[%f, %f, %f, %f]", matrix[0], matrix[1], matrix[2], matrix[3]));
-        FkLogcat.i(TAG, String.format("[%f, %f, %f, %f]", matrix[4], matrix[5], matrix[6], matrix[7]));
-        FkLogcat.i(TAG, String.format("[%f, %f, %f, %f]", matrix[8], matrix[9], matrix[10], matrix[11]));
-        FkLogcat.i(TAG, String.format("[%f, %f, %f, %f]", matrix[12], matrix[13], matrix[14], matrix[15]));
+//        FkLogcat.i(TAG, String.format("[%f, %f, %f, %f]", matrix[0], matrix[1], matrix[2], matrix[3]));
+//        FkLogcat.i(TAG, String.format("[%f, %f, %f, %f]", matrix[4], matrix[5], matrix[6], matrix[7]));
+//        FkLogcat.i(TAG, String.format("[%f, %f, %f, %f]", matrix[8], matrix[9], matrix[10], matrix[11]));
+//        FkLogcat.i(TAG, String.format("[%f, %f, %f, %f]", matrix[12], matrix[13], matrix[14], matrix[15]));
         return new int[]{
                 size.x, size.y
         };

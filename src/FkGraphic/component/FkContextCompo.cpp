@@ -52,13 +52,7 @@ FkResult FkContextCompo::create(std::shared_ptr<FkContextCompo> context,
         FkLogE(FK_DEF_TAG, "[%s] Bad config", alias.c_str());
         return FK_FAIL;
     }
-    if (nullptr != win) {
-        size = win->size();
-        eglSurface = _createWindowSurface(eglDisplay, eglConfig, win);
-    } else {
-        size = FkSize(0, 0);
-        eglSurface = _createPbufferSurface(eglDisplay, eglConfig);
-    }
+    changeSurface(win);
     if (EGL_NO_SURFACE == eglSurface) {
         FkLogE(FK_DEF_TAG, "[%s] Bad surface", alias.c_str());
         return FK_FAIL;
@@ -72,6 +66,22 @@ FkResult FkContextCompo::create(std::shared_ptr<FkContextCompo> context,
     if (EGL_NO_CONTEXT == eglContext) {
         FkLogE(FK_DEF_TAG, "[%s] Bad context", alias.c_str());
         return FK_FAIL;
+    }
+    return FK_OK;
+}
+
+FkResult FkContextCompo::changeSurface(const std::shared_ptr<FkGraphicWindow> &win) {
+    if (eglSurface != EGL_NO_SURFACE) {
+        if (EGL_TRUE != eglDestroySurface(eglDisplay, eglSurface)) {
+            FkLogE(FK_DEF_TAG, "[%s] eglDestroySurface failed", alias.c_str());
+        }
+    }
+    if (nullptr != win) {
+        size = win->size();
+        eglSurface = _createWindowSurface(eglDisplay, eglConfig, win);
+    } else {
+        size = FkSize(0, 0);
+        eglSurface = _createPbufferSurface(eglDisplay, eglConfig);
     }
     return FK_OK;
 }

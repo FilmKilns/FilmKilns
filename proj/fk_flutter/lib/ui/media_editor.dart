@@ -48,7 +48,7 @@ class _MediaEditorPageState extends State<MediaEditorPage> with WidgetsBindingOb
         }
       case AppLifecycleState.inactive:
         Logcat.debug('AppLifecycleState=$state');
-        _editor.closeCamera();
+        // _editor.closeCamera();
     //TODO
         // _editor.detachWindow();
         // _editor.stop();

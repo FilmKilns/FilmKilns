@@ -24,6 +24,7 @@ class ImageContract {
         fun onImageSaved(file: String)
         fun onImageSaving()
         fun onCameraInfo(result: FkResult)
+        fun getContext(): Context
     }
 
     abstract class Presenter : ClosablePresenter() {
@@ -53,9 +54,10 @@ class ImageContract {
         abstract fun drawPath(x: Int, y: Int)
         abstract fun drawPathFinish()
         abstract fun getPaint(): FkPaint
-        abstract fun openCamera(context: Context)
+        abstract fun openCamera()
         abstract fun closeCamera()
         abstract fun switchCamera()
         abstract fun takePicture()
+        abstract fun testAction()
     }
 }

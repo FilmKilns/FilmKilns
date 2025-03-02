@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import com.alimin.fk.source.FkBitmapSource
 import com.alimin.fk.utils.FkLogcat
-import com.alimin.fk_flutter.MainActivity.Companion.TAG
 import com.alimin.fk_flutter.module.image.ImageContract
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
@@ -19,6 +18,10 @@ class CameraChannel(
     val applicationContext: Context,
     val presenter: ImageContract.Presenter
 ) : MethodChannel.MethodCallHandler {
+    companion object {
+        const val TAG = "CameraChannel"
+    }
+
     init {
         Log.i(TAG, "Create media_editor channel")
         val methodChannel = MethodChannel(messenger, "com.alimin.flutter/media_editor")
@@ -53,7 +56,7 @@ class CameraChannel(
             }
 
             "openCamera" -> {
-                presenter.openCamera(applicationContext)
+                presenter.openCamera()
                 return
             }
 

@@ -103,6 +103,7 @@ class MainActivity : FlutterActivity(), ImageContract.View, TextureView.SurfaceT
     }
 
     override fun onSurfaceTextureSizeChanged(p0: SurfaceTexture, p1: Int, p2: Int) {
+        Log.i(TAG, "onSurfaceTextureSizeChanged")
     }
 
     override fun onSurfaceTextureDestroyed(p0: SurfaceTexture): Boolean {
@@ -117,9 +118,28 @@ class MainActivity : FlutterActivity(), ImageContract.View, TextureView.SurfaceT
         return false
     }
 
+    override fun onSurfaceTextureUpdated(p0: SurfaceTexture) {
+    }
+
+    private fun attachWindow() {
+        if (renderView == null) {
+            renderView = TextureView(this).apply {
+                surfaceTextureListener = this@MainActivity
+            }
+            surfaceContainer.addView(renderView)
+        }
+    }
+
+    private fun detachWindow() {
+        surfaceContainer.removeView(renderView)
+        renderView = null
+    }
+
     override fun onStart() {
         super.onStart()
+        Log.i(TAG, "onStart")
         presenter.start()
+        attachWindow()
 //        if (pickImagePath?.isNotEmpty() == true) {
 //            presenter.newLayerWithFile(pickImagePath!!)
 //            pickImagePath = null
@@ -127,16 +147,15 @@ class MainActivity : FlutterActivity(), ImageContract.View, TextureView.SurfaceT
     }
 
     override fun onStop() {
-        super.onStop()
+        Log.i(TAG, "onStop")
+        detachWindow()
         presenter.stop()
+        super.onStop()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         presenter.destroy()
-    }
-
-    override fun onSurfaceTextureUpdated(p0: SurfaceTexture) {
+        super.onDestroy()
     }
 
     override fun onImageSaved(file: String) {
@@ -151,5 +170,7 @@ class MainActivity : FlutterActivity(), ImageContract.View, TextureView.SurfaceT
 
     override fun onCameraInfo(result: FkResult) {
         Toast.makeText(this, "${result.code}: ${result.msg}", Toast.LENGTH_LONG).show()
+        if (result == FkResult.INFO_CAMERA_TEST_ACTION) {
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Rect
 import android.hardware.camera2.CameraManager
+import android.util.Log
 import android.util.Size
 import android.view.Surface
 import com.alimin.fk.core.FkAbsImageSource
@@ -43,11 +44,16 @@ class ImagePresenter(
     private var paint = FkPaint(10, Color.WHITE)
     private var layerUpdateListeners = ArrayList<OnLayerUpdateListener>()
     private var loadStatusListeners = ArrayList<FkDoStatusListener>()
+    private var reqRestoreCamera = false
     private var cameraLayer = -1
     private var camera: FkAbsCamera? = null
     private var cameraManager: CameraManager? = null
     private val cameraSettings = FkCameraSettings(FkCameraFeatures.kFacing.Front, Size(1080, 1440), Size(3072, 4096)).apply {
         reqFeatures.add(FkCameraFeatureKey.SCENE_AUTO_EXT)
+    }
+
+    companion object {
+        const val TAG = "ImagePresenter"
     }
 
     init {
@@ -93,9 +99,15 @@ class ImagePresenter(
                     GlobalScope.launch(Dispatchers.Main) { notifyLayers() }
                 }
             })
+        if (reqRestoreCamera) {
+            reqRestoreCamera = false
+            openCamera()
+        }
     }
 
     override fun stop() {
+        reqRestoreCamera = cameraLayer > 0
+        closeCamera()
         modelEngine.save(cacheFile.absolutePath)
         modelEngine.stop()
         engine.stop()
@@ -271,11 +283,11 @@ class ImagePresenter(
 
     override fun getPaint(): FkPaint = paint
 
-    override fun openCamera(context: Context) {
+    override fun openCamera() {
         if (camera != null) {
             return
         }
-        cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        cameraManager = view.getContext().getSystemService(Context.CAMERA_SERVICE) as CameraManager
         camera = FkCamera2(cameraManager!!)
         camera?.addOnInfoListener(this)
         camera?.let {
@@ -293,7 +305,7 @@ class ImagePresenter(
             })
             it.create()
             it.start(cameraSettings)
-            engine.newLayerWithSource(it.getImageSource())
+            cameraLayer = engine.newLayerWithSource(it.getImageSource())
         }
     }
 
@@ -353,5 +365,9 @@ class ImagePresenter(
                 engine.setCanvasSize(previewSize.width, previewSize.height)
             }
         }
+    }
+
+    override fun testAction() {
+        view.onCameraInfo(FkResult.INFO_CAMERA_TEST_ACTION)
     }
 }

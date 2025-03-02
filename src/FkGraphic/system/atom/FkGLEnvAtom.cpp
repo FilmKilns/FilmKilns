@@ -17,6 +17,8 @@
 #include "FkGLDefinition.h"
 #include "FkRenderContext.h"
 
+#define TAG "FkGLEnvAtom2"
+
 FK_IMPL_CLASS_TYPE(FkGLEnvAtom, FkSimpleAtom)
 
 FkGLEnvAtom::FkGLEnvAtom() : FkSimpleAtom(), glVersion(FK_GL_VER_2) {
@@ -45,7 +47,7 @@ FkResult FkGLEnvAtom::onCreate() {
     if (renderContext) {
         glVersion = renderContext->getGlVersion();
     }
-    FkLogI(FK_DEF_TAG, "glVersion: %d", glVersion);
+    FkLogI(TAG, "glVersion: %d", glVersion);
     _initializeWithoutWindow();
     context->makeCurrent();
     return ret;
@@ -110,11 +112,9 @@ FkResult FkGLEnvAtom::_onUpdateWindow(std::shared_ptr<FkProtocol> p) {
 
 FkResult FkGLEnvAtom::_changeWithWindow(std::shared_ptr<FkGraphicWindow> &win) {
     if (context->isPBuffer()) {
-        FkLogI(FK_DEF_TAG, "Window attach");
-        auto newContext = std::make_shared<FkContextCompo>(glVersion, "EGLAttach");
-        auto ret = newContext->create(context, win);
-        context->destroy();
-        context = newContext;
+        FkLogI(TAG, "Window attach");
+        context->makeCurrent();
+        auto ret = context->changeSurface(win);
         return ret;
     } else {
         return context->update(win);
@@ -123,11 +123,9 @@ FkResult FkGLEnvAtom::_changeWithWindow(std::shared_ptr<FkGraphicWindow> &win) {
 
 FkResult FkGLEnvAtom::_changeWithoutWindow() {
     if (!context->isPBuffer()) {
-        FkLogI(FK_DEF_TAG, "Window detach");
-        auto newContext = std::make_shared<FkContextCompo>(glVersion, "EGLDetach");
-        auto ret = newContext->create(context, nullptr);
-        context->destroy();
-        context = newContext;
+        FkLogI(TAG, "Window detach");
+        context->makeCurrent();
+        auto ret = context->changeSurface(nullptr);
         return ret;
     }
     return FK_OK;
@@ -143,6 +141,7 @@ FkResult FkGLEnvAtom::_initializeWithWindow(std::shared_ptr<FkGraphicWindow> &wi
 
 FkResult FkGLEnvAtom::_initializeWithoutWindow() {
     if (context == nullptr) {
+        FkLogI(TAG, "Window init detach");
         context = std::make_shared<FkContextCompo>(glVersion, "EGLDetach");
         return context->create();
     }

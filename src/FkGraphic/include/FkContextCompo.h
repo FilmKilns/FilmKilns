@@ -33,6 +33,8 @@ public:
 
     FkResult update(std::shared_ptr<FkGraphicWindow> win);
 
+    FkResult changeSurface(const std::shared_ptr<FkGraphicWindow> &win);
+
     void destroy();
 
     FkResult swapBuffers();
