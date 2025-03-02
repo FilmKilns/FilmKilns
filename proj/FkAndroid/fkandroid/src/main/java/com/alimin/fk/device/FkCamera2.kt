@@ -117,6 +117,7 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
         }
         this.curExpMetadata = null
         FkLogcat.i(TAG, "Preview size ${settings.previewSize.width}x${settings.previewSize.height} -> ${previewSize.width}x${previewSize.height}")
+        dispatchInfo(FkResult.INFO_CAMERA_PREVIEW_SIZE_SELECTED, 0, Size(previewSize.height, previewSize.width))
         surfaceSource.setSize(previewSize.width, previewSize.height)
         try {
             manager.openCamera(curFeatures!!.id, deviceStateCallback, handler)
@@ -352,6 +353,7 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
             format = ImageFormat.JPEG
         }
         FkLogcat.i(TAG, "Picture size ${cameraSettings.pictureSize.width}x${cameraSettings.pictureSize.height} -> ${pictureSize.width}x${pictureSize.height}, format=$format")
+        dispatchInfo(FkResult.INFO_CAMERA_PICTURE_SIZE_SELECTED, 0, Size(pictureSize.height, pictureSize.width))
         val reader = ImageReader.newInstance(
             pictureSize.width,
             pictureSize.height,
@@ -407,7 +409,7 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
             if (curExpMetadata == null) {
                 curExpMetadata = FkCaptureMetadata(result)
             }
-            FkLogcat.d(TAG, "onCaptureCompleted preview: ${latestPrevMetadata!!.ISO}, ${latestPrevMetadata!!.exposureTime}")
+//            FkLogcat.d(TAG, "onCaptureCompleted preview: ${latestPrevMetadata!!.ISO}, ${latestPrevMetadata!!.exposureTime}")
             _fillFeatures()
         }
     }

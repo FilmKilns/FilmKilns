@@ -297,6 +297,7 @@ FkResult FkLayerEngine::setCanvasSizeInternal(FkSize &size, bool isInitialize) {
     if (size == queryProto->value) {
         return FK_FAIL;
     }
+    FkLogI(TAG, "setCanvasSizeInternal %dx%d", size.getWidth(), size.getHeight());
 
     auto sizeComp = std::make_shared<FkSizeCompo>(size);
 

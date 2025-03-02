@@ -21,16 +21,13 @@ import kotlin.jvm.functions.Function1;
 @Keep
 @FkNativeAuto(path = "cpp/native/engine")
 public class FkImage extends FkEngine {
-    private long _handle = 0L;
     private String workspace;
-    private final Object mSyncLock = new Object();
 
     public FkImage(String workspace) {
         this.workspace = workspace;
     }
 
     public FkImage(long _handle) {
-        this._handle = _handle;
     }
 
     @Override
@@ -78,15 +75,15 @@ public class FkImage extends FkEngine {
      * @param path Picture file path
      * @return Layer id.
      */
-    public FkResult newLayerWithFile(String path) {
-        return withInt(handle -> nativeNewLayerWithFile(handle, path));
+    public int newLayerWithFile(String path) {
+        return withInt(handle -> nativeNewLayerWithFile(handle, path)).getCode();
     }
 
     /**
      * @return Layer id.
      */
-    public FkResult newLayerWithColor(Size size, int red, int green, int blue, int alpha) {
-        return withInt(handle -> nativeNewLayerWithColor(handle, size.getWidth(), size.getHeight(), red, green, blue, alpha));
+    public int newLayerWithColor(Size size, int red, int green, int blue, int alpha) {
+        return withInt(handle -> nativeNewLayerWithColor(handle, size.getWidth(), size.getHeight(), red, green, blue, alpha)).getCode();
     }
 
     /**

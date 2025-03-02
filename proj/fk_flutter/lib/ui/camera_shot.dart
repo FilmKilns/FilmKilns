@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:fk_flutter/fk/fk_image_engine.dart';
 import 'package:fk_flutter/utils/logcat.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:fk_flutter/fk/entity/FkValue.dart';
-import 'package:fk_flutter/fk/plugin/fk_image_hist_plugin.dart';
+import 'package:fk_flutter/channels/media_editor_channel.dart';
 
 class CameraShotPage extends StatefulWidget {
-  final FkImageEngine _editor;
   final VoidCallback _onClosed;
   final bool showCloseButton;
   final ValueChanged<int> _onCaptureDone;
 
-  const CameraShotPage(this._editor, this.showCloseButton, this._onClosed, this._onCaptureDone, {super.key});
+  const CameraShotPage(this.showCloseButton, this._onClosed, this._onCaptureDone, {super.key});
 
   @override
   State<CameraShotPage> createState() => _CameraShotPageState();
@@ -20,72 +18,33 @@ class CameraShotPage extends StatefulWidget {
 
 class _CameraShotPageState extends State<CameraShotPage>
     with WidgetsBindingObserver {
-  int _cameraLayer = -1;
-  int _captureLayer = -1;
-  int _histLayer = -1;
+  final _editor = MediaEditorChannel();
+  bool __isCaptured = false;
 
   void _openCamera() {
-    Permission.camera.status.then((status) {
-      if (!status.isDenied) {
-        widget._editor.openCamera().then((ret) {
-          _cameraLayer = ret;
-          WakelockPlus.enable();
-          final histPlugin = FkImageHistPlugin();
-          histPlugin.updateParams({
-            "scale": FkValue.toFloat(0.8),
-            "ratio": FkValue.toFloat(0.5),
-            "location": FkValue.toInt32(0)
-          });
-          _histLayer = widget._editor.newLayerWithPlugin(histPlugin);
-          if (_cameraLayer > 0 && _histLayer > 0) {
-            widget._editor.setProjectionLayer(_histLayer, _cameraLayer);
-            // widget._editor.setVisibility(_cameraLayer, 1);
-          }
-          widget._editor.setOnCameraFrameUpdatedListener((){
-            final dartCntValue = histPlugin.getParam("cnt_dart");
-            final mediumCntValue = histPlugin.getParam("cnt_medium");
-            final brightCntValue = histPlugin.getParam("cnt_bright");
-            final maxCntValue = histPlugin.getParam("cnt_max");
-            final expValueValue = histPlugin.getParam("exposure_value");
-            if (expValueValue != null) {
-              widget._editor.notifyCameraExposure(expValueValue.int32Val);
-            }
-            Logcat.debug("cnt_dart=${dartCntValue?.int32Val}, cnt_medium=${mediumCntValue?.int32Val}, cnt_bright=${brightCntValue?.int32Val}, cnt_max=${maxCntValue?.int32Val}, exposure_value=${expValueValue?.int32Val}");
-          });
-        });
-      }
-    });
+    _editor.openCamera();
   }
 
-  Future<int> _closeCamera() {
-    WakelockPlus.disable();
-    widget._editor.setOnCameraFrameUpdatedListener(null);
-    widget._editor.removeLayer(_histLayer);
-    _histLayer = -1;
-    widget._editor.removeLayer(_cameraLayer);
-    _cameraLayer = -1;
-    return widget._editor.closeCamera();
+  void _closeCamera() {
+    _editor.closeCamera();
   }
 
   bool _isCaptured() {
-    return _captureLayer > 0;
+    return __isCaptured;
   }
 
   void _captureDone() {
     _closeCamera();
-    widget._onCaptureDone(_captureLayer);
+    setState(() {
+      __isCaptured = true;
+    });
   }
 
   void _captureCancel() {
-    if (_cameraLayer <= 0) {
-      _openCamera();
-    }
-    if (_captureLayer > 0) {
-      widget._editor.removeLayer(_captureLayer);
-      setState(() {
-        _captureLayer = -1;
-      });
-    }
+    _openCamera();
+    setState(() {
+      __isCaptured = false;
+    });
   }
 
   @override
@@ -93,7 +52,7 @@ class _CameraShotPageState extends State<CameraShotPage>
     switch (state) {
       case AppLifecycleState.resumed:
         Logcat.debug('AppLifecycleState=$state');
-        if (_cameraLayer > 0) {
+        if (__isCaptured) {
           _openCamera();
         }
       case AppLifecycleState.inactive:
@@ -119,17 +78,8 @@ class _CameraShotPageState extends State<CameraShotPage>
           _captureDone();
           return;
         }
-        widget._editor.capture().then((layerId){
-          Logcat.debug('Capture layerId=$layerId');
-          _closeCamera();
-          if (layerId > 0) {
-            setState(() {
-              _captureLayer = layerId;
-            });
-          } else {
-            _captureCancel();
-          }
-        });
+        _editor.capture();
+        _captureDone();
       },
       style: ButtonStyle(
         shape: WidgetStateProperty.all(const CircleBorder()),
@@ -153,7 +103,7 @@ class _CameraShotPageState extends State<CameraShotPage>
           child: IconButton(
             onPressed: () {
               if (_isCaptured()) {
-                widget._editor.exportFile("/sdcard/DCIM/${widget._editor.getWorkspaceName()}.jpg");
+                // widget._editor.exportFile("/sdcard/DCIM/${widget._editor.getWorkspaceName()}.jpg");
               }
             },
             style: ButtonStyle(
@@ -187,7 +137,7 @@ class _CameraShotPageState extends State<CameraShotPage>
                       _captureCancel();
                       return;
                     }
-                    widget._editor.switchCamera();
+                    _editor.switchCamera();
                   },
                   style: ButtonStyle(
                       padding: WidgetStateProperty.all(const EdgeInsets.all(12))),
@@ -205,9 +155,9 @@ class _CameraShotPageState extends State<CameraShotPage>
                   child: Container(
                     child: IconButton(
                       onPressed: () {
-                        _captureCancel();
-                        _closeCamera().then((ret) {
-                          widget._onClosed();
+                        _editor.closeCamera();
+                        setState(() {
+                          __isCaptured = false;
                         });
                       },
                       style: ButtonStyle(

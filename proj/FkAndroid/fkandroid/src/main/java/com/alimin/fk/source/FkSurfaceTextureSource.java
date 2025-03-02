@@ -24,7 +24,7 @@ public class FkSurfaceTextureSource extends FkAbsImageSource {
         void done(int arg0, long arg1, String arg2);
     }
 
-    private final static String TAG = "FkSurfaceTextureSource2";
+    private final static String TAG = "FkSurfaceTextureSource";
     private Surface surface;
     private SurfaceTexture surfaceTexture;
     private Point size = new Point(0, 0);
@@ -190,6 +190,10 @@ public class FkSurfaceTextureSource extends FkAbsImageSource {
     @NonNull
     @Override
     public int[] getSize() {
+        FkLogcat.i(TAG, String.format("[%f, %f, %f, %f]", matrix[0], matrix[1], matrix[2], matrix[3]));
+        FkLogcat.i(TAG, String.format("[%f, %f, %f, %f]", matrix[4], matrix[5], matrix[6], matrix[7]));
+        FkLogcat.i(TAG, String.format("[%f, %f, %f, %f]", matrix[8], matrix[9], matrix[10], matrix[11]));
+        FkLogcat.i(TAG, String.format("[%f, %f, %f, %f]", matrix[12], matrix[13], matrix[14], matrix[15]));
         return new int[]{
                 size.x, size.y
         };

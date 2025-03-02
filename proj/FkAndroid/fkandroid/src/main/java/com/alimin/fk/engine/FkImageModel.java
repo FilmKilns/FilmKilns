@@ -4,6 +4,7 @@ import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
 import com.alimin.fk.entity.FkResult;
+import com.alimin.fk.listener.FkDoStatusListener;
 import com.alimin.fk.listener.FkGetLayersListener;
 import com.alimin.fk.listener.FkNativeMsgListener;
 import com.alimin.fk.pb.FkImageLayerOuterClass;
@@ -62,7 +63,7 @@ public class FkImageModel extends FkEngine {
         return withInt(handle -> nativeSave(handle, file));
     }
 
-    public FkResult load(String file, @NotNull OnDoStatusListener listener) {
+    public FkResult load(String file, @NotNull FkDoStatusListener listener) {
         return withInt(handle -> nativeLoad(handle, file, new FkNativeMsgListener() {
             @Override
             public boolean onNativeMsgReceived(int what, int arg, @Nullable String msg, @Nullable ByteBuffer pbObject) {
@@ -112,7 +113,4 @@ public class FkImageModel extends FkEngine {
     private native int nativeLoad(long handle, String file, FkNativeMsgListener listener);
     private native int nativeGetLayers(long handle, FkNativeMsgListener listener);
 
-    public interface OnDoStatusListener {
-        void onDone();
-    }
 }

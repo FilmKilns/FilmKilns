@@ -70,4 +70,5 @@ flutter {
 
 dependencies {
     implementation project(path: ':fkandroid')
+    implementation project(path: ':hwmvp')
 }

@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return const MediaEditorPage(title: "编辑");
+            return const MediaEditorPage(true, title: "编辑");
           }));
         },
         tooltip: 'Increment',

@@ -2,23 +2,19 @@ import 'package:fk_flutter/utils/logcat.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:fk_flutter/fk/entity/FkImageLayer.pb.dart';
-import 'package:fk_flutter/fk/fk_image_engine.dart';
 import 'package:fk_flutter/utils/system_utils.dart';
-import 'package:fk_flutter/fk/plugin/fk_image_hist_plugin.dart';
+import 'package:fk_flutter/channels/media_editor_channel.dart';
 
 class LayerListPage extends StatefulWidget {
-  final FkImageEngine _editor;
-
-  const LayerListPage(this._editor, {super.key});
+  const LayerListPage({super.key});
 
   @override
   State<LayerListPage> createState() => _LayerListPageState();
 }
 
 class _LayerListPageState extends State<LayerListPage> with WidgetsBindingObserver {
+  final _editor = MediaEditorChannel();
   List<FkImageLayer>? layers;
-  int histPluginLayerId = -1;
-  FkImageHistPlugin? histPlugin;
   static const double _ITEM_SIZE = 30;
   static const double _ITEM_TEXT_SIZE = 14;
   static const _MAIN_EDGE = EdgeInsets.fromLTRB(0, 6, 0, 6);
@@ -27,9 +23,10 @@ class _LayerListPageState extends State<LayerListPage> with WidgetsBindingObserv
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
-        widget._editor.getPictureModel().then((value) => setState(() {
-              layers = value?.layers;
-            }));
+      //TODO
+        // _editor.getPictureModel().then((value) => setState(() {
+        //       layers = value?.layers;
+        //     }));
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
       case AppLifecycleState.inactive:
@@ -97,33 +94,36 @@ class _LayerListPageState extends State<LayerListPage> with WidgetsBindingObserv
   void pickImage() {
     SystemUtils.pickImage(context, (file) {
       if (file != null) {
-        widget._editor.convertImage(file.path).then((path) {
-          widget._editor.newLayerWithFile(File(path));
-          widget._editor.notifyRender();
-          widget._editor.getPictureModel().then((value) => setState(() {
-                layers = value?.layers;
-                Navigator.of(context).pop();
-              }));
+        _editor.convertImage(file.path).then((path) {
+          //TODO
+          // _editor.newLayerWithFile(File(path));
+          // _editor.notifyRender();
+          // _editor.getPictureModel().then((value) => setState(() {
+          //       layers = value?.layers;
+          //       Navigator.of(context).pop();
+          //     }));
         });
       }
     });
   }
 
   void showHist() {
-    histPlugin = FkImageHistPlugin();
-    if (histPlugin != null) {
-      histPlugin?.updateParams({});
-      histPluginLayerId = widget._editor.newLayerWithPlugin(histPlugin!);
-      if (layers?.isNotEmpty == true && histPluginLayerId > 0) {
-        widget._editor.setProjectionLayer(histPluginLayerId, layers![0].id);
-        Logcat.debug('showHist: $histPluginLayerId, ${layers![0].id}');
-        widget._editor.notifyRender();
-      }
-    }
+    //TODO
+    // histPlugin = FkImageHistPlugin();
+    // if (histPlugin != null) {
+    //   histPlugin?.updateParams({});
+    //   histPluginLayerId = widget._editor.newLayerWithPlugin(histPlugin!);
+    //   if (layers?.isNotEmpty == true && histPluginLayerId > 0) {
+    //     widget._editor.setProjectionLayer(histPluginLayerId, layers![0].id);
+    //     Logcat.debug('showHist: $histPluginLayerId, ${layers![0].id}');
+    //     widget._editor.notifyRender();
+    //   }
+    // }
   }
 
   void undo() {
-    widget._editor.notifyRender();
+    //TODO
+    // _editor.notifyRender();
   }
 
   void redo() {
@@ -150,13 +150,14 @@ class _LayerListPageState extends State<LayerListPage> with WidgetsBindingObserv
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    widget._editor.getPictureModel().then((value) => setState(() {
-      if (value?.layers == null) {
-        layers = [];
-      } else {
-        layers = value?.layers;
-      }
-    }));
+    //TODO
+    // _editor.getPictureModel().then((value) => setState(() {
+    //   if (value?.layers == null) {
+    //     layers = [];
+    //   } else {
+    //     layers = value?.layers;
+    //   }
+    // }));
   }
 
   @override

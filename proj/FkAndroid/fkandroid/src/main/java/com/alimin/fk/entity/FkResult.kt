@@ -24,6 +24,10 @@ class FkResult(val code: Int, val msg: String) {
         val INFO_CAMERA_STOPPED = FkResult(1001, "Camera stopped")
         val INFO_CAMERA_FILL_SOME_FEATURES_FINISH = FkResult(1002, "Fill some features finish")
         val INFO_CAMERA_FILL_ALL_FEATURES_FINISH = FkResult(1003, "Fill all features finish")
+        val INFO_CAMERA_TAKE_PICTURE_SUCCESS = FkResult(1004, "Take picture success")
+        val INFO_CAMERA_SWITCH_DONE = FkResult(1005, "Switch camera done")
+        val INFO_CAMERA_PREVIEW_SIZE_SELECTED = FkResult(1006, "Preview size selected")
+        val INFO_CAMERA_PICTURE_SIZE_SELECTED = FkResult(1007, "Picture size selected")
         val INFO_END = FkResult(9999, "Info end flag")
     }
 

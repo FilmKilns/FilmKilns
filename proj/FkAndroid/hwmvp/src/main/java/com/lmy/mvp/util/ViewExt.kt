@@ -16,8 +16,8 @@
 package com.lmy.mvp.util
 
 import android.view.View
-import com.google.android.material.snackbar.Snackbar
+import android.widget.Toast
 
-fun View.showSnackBar(message: String, duration: Int = Snackbar.LENGTH_LONG) {
-    Snackbar.make(this, message, duration).show()
+fun View.showSnackBar(message: String, duration: Int = Toast.LENGTH_LONG) {
+    Toast.makeText(this.context, message, duration).show()
 }
