@@ -14,6 +14,7 @@ import android.media.ImageReader
 import android.os.Build
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Looper
 import android.util.Size
 import android.view.Surface
 import com.alimin.fk.core.FkAbsImageSource
@@ -35,6 +36,7 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
     private var filledFeatures = false
     private val cameraDeviceLock = Object()
     private var cameraDevice: CameraDevice? = null
+    private val mainHandler = Handler(Looper.getMainLooper())
     private lateinit var thread: HandlerThread
     private lateinit var handler: Handler
     private var curFeatures: FkCameraFeatures? = null
@@ -366,8 +368,9 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
                     val format = image.format
                     val timestamp = image.timestamp
                     FkLogcat.i(TAG, "Get picture ${image.width}x${image.height}, format=${format}, timestamp=${timestamp}")
-                    captureListenerQueue.poll()?.onResult(createImageSource(reader, image))
+                    val source = createImageSource(reader, image)
                     image.close()
+                    mainHandler.post { captureListenerQueue.poll()?.onResult(source) }
                 }
             }, handler)
         }

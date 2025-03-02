@@ -46,6 +46,7 @@ class ImagePresenter(
     private var loadStatusListeners = ArrayList<FkDoStatusListener>()
     private var reqRestoreCamera = false
     private var cameraLayer = -1
+    private var captureLayer = -1
     private var camera: FkAbsCamera? = null
     private var cameraManager: CameraManager? = null
     private val cameraSettings = FkCameraSettings(FkCameraFeatures.kFacing.Front, Size(1080, 1440), Size(3072, 4096)).apply {
@@ -66,6 +67,7 @@ class ImagePresenter(
     private fun notifyLayers() {
         getLayers(object : FkGetLayersListener {
             override fun onGetLayers(layers: List<FkImageLayerOuterClass.FkImageLayer>) {
+                GlobalScope.launch(Dispatchers.Main) {view.onPresenterInfo(FkResult.INFO_LAYER_CNT, layers.size)}
                 synchronized(this) {
                     layerUpdateListeners.forEach {
                         GlobalScope.launch(Dispatchers.Main) {
@@ -287,6 +289,7 @@ class ImagePresenter(
         if (camera != null) {
             return
         }
+        clearCaptureLayer()
         cameraManager = view.getContext().getSystemService(Context.CAMERA_SERVICE) as CameraManager
         camera = FkCamera2(cameraManager!!)
         camera?.addOnInfoListener(this)
@@ -300,12 +303,14 @@ class ImagePresenter(
 
                 override fun onRender() {
                     notifyRender()
-//                    runOnUiThread { methodChannel?.invokeMethod("onCameraFrameUpdated", null) }
                 }
             })
             it.create()
             it.start(cameraSettings)
             cameraLayer = engine.newLayerWithSource(it.getImageSource())
+            if (cameraLayer > 0) {
+                notifyLayers()
+            }
         }
     }
 
@@ -334,7 +339,7 @@ class ImagePresenter(
                     }
                     val ret = it.start(cameraSettings)
                     if (ret == FkResult.OK.code) {
-                        view.onCameraInfo(FkResult.INFO_CAMERA_SWITCH_DONE)
+                        view.onPresenterInfo(FkResult.INFO_CAMERA_SWITCH_DONE)
                     } else {
                         view.showError(FkResult.FAIL.code, "Switch camera fail")
                     }
@@ -345,14 +350,26 @@ class ImagePresenter(
         }
     }
 
+    private fun clearCaptureLayer() {
+        if (captureLayer > 0) {
+            removeLayer(captureLayer)
+            captureLayer = 0
+        }
+    }
+
     override fun takePicture() {
         camera?.takePicture(object : OnCaptureListener {
             override fun onResult(source: FkAbsImageSource?) {
                 if (source == null) {
                     view.showError(FkResult.FAIL.code, "Capture fail")
                 } else {
-                    newLayerWithSource(source)
-                    view.onCameraInfo(FkResult.INFO_CAMERA_TAKE_PICTURE_SUCCESS)
+                    clearCaptureLayer()
+                    captureLayer = engine.newLayerWithSource(source)
+                    if (captureLayer > 0) {
+                        notifyLayers()
+                    }
+                    closeCamera()
+                    view.onPresenterInfo(FkResult.INFO_CAMERA_TAKE_PICTURE_SUCCESS)
                 }
             }
         })
@@ -368,6 +385,6 @@ class ImagePresenter(
     }
 
     override fun testAction() {
-        view.onCameraInfo(FkResult.INFO_CAMERA_TEST_ACTION)
+        view.onPresenterInfo(FkResult.INFO_CAMERA_TEST_ACTION)
     }
 }

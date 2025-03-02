@@ -14,6 +14,7 @@ import android.widget.Toast
 import com.alimin.fk.FilmKilns
 import com.alimin.fk.engine.FkImage
 import com.alimin.fk.entity.FkResult
+import com.alimin.fk.utils.FkLogcat
 import com.alimin.fk_flutter.channels.CameraChannel
 import com.alimin.fk_flutter.module.image.ImageContract
 import com.alimin.fk_flutter.module.image.ImagePresenter
@@ -168,9 +169,18 @@ class MainActivity : FlutterActivity(), ImageContract.View, TextureView.SurfaceT
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
 
-    override fun onCameraInfo(result: FkResult) {
+    override fun onPresenterInfo(result: FkResult, arg0 : Any?) {
         Toast.makeText(this, "${result.code}: ${result.msg}", Toast.LENGTH_LONG).show()
-        if (result == FkResult.INFO_CAMERA_TEST_ACTION) {
+        when (result.code) {
+            FkResult.INFO_CAMERA_TAKE_PICTURE_SUCCESS.code -> {
+                cameraChannel.deliveryInfo(result)
+            }
+            FkResult.INFO_LAYER_CNT.code -> {
+                FkLogcat.i(TAG, "Layer cnt=$arg0")
+            }
+            FkResult.INFO_CAMERA_TEST_ACTION.code -> {
+
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:fk_flutter/fk/entity/FkValue.dart';
 import 'package:fk_flutter/channels/media_editor_channel.dart';
+import 'package:fk_flutter/fk_result.dart';
 
 class CameraShotPage extends StatefulWidget {
   final VoidCallback _onClosed;
@@ -34,7 +35,6 @@ class _CameraShotPageState extends State<CameraShotPage>
   }
 
   void _captureDone() {
-    _closeCamera();
     setState(() {
       __isCaptured = true;
     });
@@ -63,6 +63,13 @@ class _CameraShotPageState extends State<CameraShotPage>
     super.initState();
     Logcat.debug('initState, mounted: $mounted');
     WidgetsBinding.instance.addObserver(this);
+    _editor.addOnInfoListener((int code, String msg) {
+      switch (code) {
+        case FkResult.INFO_CAMERA_TAKE_PICTURE_SUCCESS:
+          _captureDone();
+          break;
+      }
+    });
     _openCamera();
   }
 
@@ -71,11 +78,9 @@ class _CameraShotPageState extends State<CameraShotPage>
     final centerButton = ElevatedButton(
       onPressed: () {
         if (_isCaptured()) {
-          _captureDone();
           return;
         }
         _editor.capture();
-        _captureDone();
       },
       style: ButtonStyle(
         shape: WidgetStateProperty.all(const CircleBorder()),

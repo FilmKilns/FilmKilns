@@ -23,7 +23,7 @@ class ImageContract {
     interface View : BaseView<Presenter> {
         fun onImageSaved(file: String)
         fun onImageSaving()
-        fun onCameraInfo(result: FkResult)
+        fun onPresenterInfo(result: FkResult, arg0 : Any? = null)
         fun getContext(): Context
     }
 

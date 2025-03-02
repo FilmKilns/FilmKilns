@@ -29,6 +29,8 @@ class FkResult(val code: Int, val msg: String) {
         val INFO_CAMERA_PREVIEW_SIZE_SELECTED = FkResult(1006, "Preview size selected")
         val INFO_CAMERA_PICTURE_SIZE_SELECTED = FkResult(1007, "Picture size selected")
         val INFO_CAMERA_TEST_ACTION = FkResult(10008, "Camera test")
+
+        val INFO_LAYER_CNT = FkResult(10100, "Layer count")
         val INFO_END = FkResult(9999, "Info end flag")
     }
 

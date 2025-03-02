@@ -7,15 +7,29 @@ const _mediaEditorMethodChannel =
     MethodChannel("com.alimin.flutter/media_editor");
 
 class MediaEditorChannel {
+  List<Function(int, String)> onInfoListeners = [];
   MediaEditorChannel() {
     _mediaEditorMethodChannel.setMethodCallHandler((call) {
       Logcat.debug("Flutter setMethodCallHandler ${call.method}");
-      if (call.method == "attachToSurfaceDone") {
-      } else if (call.method == "detachFromSurfaceDone") {
-      } else if (call.method == "onCameraFrameUpdated") {
+      if (call.method == "onDeliveryInfo") {
+        _onDeliveryInfo(call.arguments["Code"], call.arguments["Msg"]);
       }
       return Future(() => 0);
     });
+  }
+
+  void _onDeliveryInfo(int code, String msg) {
+    for (Function(int, String) l in onInfoListeners) {
+      l(code, msg);
+    }
+  }
+
+  void addOnInfoListener(Function(int, String) l) {
+    onInfoListeners.add(l);
+  }
+
+  void removeOnInfoListener(Function(int, String) l) {
+    onInfoListeners.remove(l);
   }
 
   Future<int> attachWindow(Pointer<Void> handle) {

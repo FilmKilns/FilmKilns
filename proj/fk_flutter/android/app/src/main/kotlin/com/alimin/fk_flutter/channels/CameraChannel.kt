@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import com.alimin.fk.entity.FkResult
 import com.alimin.fk.source.FkBitmapSource
 import com.alimin.fk.utils.FkLogcat
 import com.alimin.fk_flutter.module.image.ImageContract
@@ -15,17 +16,24 @@ import java.nio.ByteBuffer
 
 class CameraChannel(
     messenger: BinaryMessenger,
-    val applicationContext: Context,
-    val presenter: ImageContract.Presenter
+    private val applicationContext: Context,
+    private val presenter: ImageContract.Presenter
 ) : MethodChannel.MethodCallHandler {
     companion object {
         const val TAG = "CameraChannel"
     }
+    private val methodChannel = MethodChannel(messenger, "com.alimin.flutter/media_editor")
 
     init {
         Log.i(TAG, "Create media_editor channel")
-        val methodChannel = MethodChannel(messenger, "com.alimin.flutter/media_editor")
         methodChannel.setMethodCallHandler(this@CameraChannel)
+    }
+
+    fun deliveryInfo(result: FkResult) {
+        methodChannel.invokeMethod(
+            "onDeliveryInfo",
+            mapOf("Code" to result.code, "Msg" to result.msg)
+        )
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -57,21 +65,26 @@ class CameraChannel(
 
             "openCamera" -> {
                 presenter.openCamera()
+                result.success(FkResult.OK.code)
                 return
             }
 
             "closeCamera" -> {
+                val expValue = arguments["exposure_value"] as Int?
                 presenter.closeCamera()
+                result.success(FkResult.OK.code)
                 return
             }
 
             "switchCamera" -> {
                 presenter.switchCamera()
+                result.success(FkResult.OK.code)
                 return
             }
 
             "capture" -> {
                 presenter.takePicture()
+                result.success(FkResult.OK.code)
                 return
             }
 
