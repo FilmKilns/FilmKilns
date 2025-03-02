@@ -177,14 +177,14 @@ class MainActivity : FlutterActivity(), ImageContract.View, TextureView.SurfaceT
     }
 
     override fun onImageSaved(file: String) {
-        Toast.makeText(this, "Saved to $file", Toast.LENGTH_LONG).show()
+        cameraChannel.deliveryTip(FkResult(FkResult.OK.code, "Saved to $file"), false)
     }
 
     override fun onImageSaving() {
     }
 
     override fun showError(error: Int, msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+        cameraChannel.deliveryTip(FkResult(error, msg), true)
     }
 
     override fun onPresenterInfo(result: FkResult, arg0 : Any?) {

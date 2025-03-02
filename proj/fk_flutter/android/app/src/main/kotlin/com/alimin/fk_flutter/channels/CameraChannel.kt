@@ -36,6 +36,13 @@ class CameraChannel(
         )
     }
 
+    fun deliveryTip(result: FkResult, isError: Boolean) {
+        methodChannel.invokeMethod(
+            "onDeliveryTip",
+            mapOf("Code" to result.code, "Msg" to result.msg, "isError" to isError)
+        )
+    }
+
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         Log.i(TAG, "onMethodCall ${call.method}")
         val arguments = call.arguments as Map<*, *>

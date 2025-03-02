@@ -8,11 +8,14 @@ const _mediaEditorMethodChannel =
 
 class MediaEditorChannel {
   List<Function(int, String)> _onInfoListeners = [];
+  List<Function(int, String, bool)> _onTipListeners = [];
   MediaEditorChannel() {
     _mediaEditorMethodChannel.setMethodCallHandler((call) {
       Logcat.debug("Flutter setMethodCallHandler ${call.method}");
       if (call.method == "onDeliveryInfo") {
         _onDeliveryInfo(call.arguments["Code"], call.arguments["Msg"]);
+      } else if (call.method == "onDeliveryTip") {
+        _onDeliveryTip(call.arguments["Code"], call.arguments["Msg"], call.arguments["isError"]);
       }
       return Future(() => 0);
     });
@@ -30,6 +33,20 @@ class MediaEditorChannel {
 
   void removeOnInfoListener(Function(int, String) l) {
     _onInfoListeners.remove(l);
+  }
+
+  void _onDeliveryTip(int code, String msg, bool isError) {
+    for (Function(int, String) l in _onInfoListeners) {
+      l(code, msg);
+    }
+  }
+
+  void addOnTipListener(Function(int, String, bool) l) {
+    _onTipListeners.add(l);
+  }
+
+  void removeOnTipListener(Function(int, String, bool) l) {
+    _onTipListeners.remove(l);
   }
 
   Future<int> savePicture() {

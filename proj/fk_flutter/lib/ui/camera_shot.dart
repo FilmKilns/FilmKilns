@@ -21,6 +21,7 @@ class _CameraShotPageState extends State<CameraShotPage>
     with WidgetsBindingObserver {
   final _editor = MediaEditorChannel();
   bool __isCaptured = false;
+  bool _showSnackBar = false;
 
   void _openCamera() {
     _editor.openCamera();
@@ -67,14 +68,27 @@ class _CameraShotPageState extends State<CameraShotPage>
       switch (code) {
         case FkResult.INFO_CAMERA_TAKE_PICTURE_SUCCESS:
           _captureDone();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('这是一个 SnackBar 消息'),
+            ),
+          );
           break;
       }
+    });
+    _editor.addOnTipListener((int code, String msg, bool isError) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('这是一个 SnackBar 消息'),
+        ),
+      );
     });
     _openCamera();
   }
 
   @override
   Widget build(BuildContext context) {
+
     final centerButton = ElevatedButton(
       onPressed: () {
         if (_isCaptured()) {
