@@ -2,32 +2,33 @@
 import 'package:flutter/services.dart';
 import 'dart:ffi';
 import 'package:fk_flutter/utils/logcat.dart';
+import 'package:fk_flutter/fk/entity/fk_result.dart';
 
 const _mediaEditorMethodChannel =
     MethodChannel("com.alimin.flutter/media_editor");
 
 class MediaEditorChannel {
-  List<Function(int, String)> _onInfoListeners = [];
-  List<Function(int, String, bool)> _onTipListeners = [];
+  List<Function(FkResult)> _onInfoListeners = [];
+  List<Function(FkResult)> _onTipListeners = [];
   MediaEditorChannel() {
     _mediaEditorMethodChannel.setMethodCallHandler((call) {
       Logcat.debug("Flutter setMethodCallHandler ${call.method}");
       if (call.method == "onDeliveryInfo") {
-        _onDeliveryInfo(call.arguments["Code"], call.arguments["Msg"]);
+        _onDeliveryInfo(FkResult(call.arguments["Code"], call.arguments["Msg"]));
       } else if (call.method == "onDeliveryTip") {
-        _onDeliveryTip(call.arguments["Code"], call.arguments["Msg"], call.arguments["isError"]);
+        _onDeliveryTip(FkResult(call.arguments["Code"], call.arguments["Msg"]));
       }
       return Future(() => 0);
     });
   }
 
-  void _onDeliveryInfo(int code, String msg) {
-    for (Function(int, String) l in _onInfoListeners) {
-      l(code, msg);
+  void _onDeliveryInfo(FkResult result) {
+    for (Function(FkResult) l in _onInfoListeners) {
+      l(result);
     }
   }
 
-  void addOnInfoListener(Function(int, String) l) {
+  void addOnInfoListener(Function(FkResult) l) {
     _onInfoListeners.add(l);
   }
 
@@ -35,17 +36,17 @@ class MediaEditorChannel {
     _onInfoListeners.remove(l);
   }
 
-  void _onDeliveryTip(int code, String msg, bool isError) {
-    for (Function(int, String) l in _onInfoListeners) {
-      l(code, msg);
+  void _onDeliveryTip(FkResult result) {
+    for (Function(FkResult) l in _onTipListeners) {
+      l(result);
     }
   }
 
-  void addOnTipListener(Function(int, String, bool) l) {
+  void addOnTipListener(Function(FkResult) l) {
     _onTipListeners.add(l);
   }
 
-  void removeOnTipListener(Function(int, String, bool) l) {
+  void removeOnTipListener(Function(FkResult) l) {
     _onTipListeners.remove(l);
   }
 

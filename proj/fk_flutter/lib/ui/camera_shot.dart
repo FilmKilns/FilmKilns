@@ -4,7 +4,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:fk_flutter/fk/entity/FkValue.dart';
 import 'package:fk_flutter/channels/media_editor_channel.dart';
-import 'package:fk_flutter/fk_result.dart';
+import 'package:fk_flutter/fk/entity/fk_result.dart';
 
 class CameraShotPage extends StatefulWidget {
   final VoidCallback _onClosed;
@@ -21,7 +21,6 @@ class _CameraShotPageState extends State<CameraShotPage>
     with WidgetsBindingObserver {
   final _editor = MediaEditorChannel();
   bool __isCaptured = false;
-  bool _showSnackBar = false;
 
   void _openCamera() {
     _editor.openCamera();
@@ -48,6 +47,23 @@ class _CameraShotPageState extends State<CameraShotPage>
     });
   }
 
+  void _showInfo(FkResult result) {
+    if (result.code == FkResult.INFO_CAMERA_TAKE_PICTURE_SUCCESS.code) {
+      _captureDone();
+      _showTip(result);
+    }
+  }
+
+  void _showTip(FkResult result) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(result.msg),
+        backgroundColor: const Color(0x33000000),
+        behavior: SnackBarBehavior.fixed,
+      ),
+    );
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
@@ -64,24 +80,11 @@ class _CameraShotPageState extends State<CameraShotPage>
     super.initState();
     Logcat.debug('initState, mounted: $mounted');
     WidgetsBinding.instance.addObserver(this);
-    _editor.addOnInfoListener((int code, String msg) {
-      switch (code) {
-        case FkResult.INFO_CAMERA_TAKE_PICTURE_SUCCESS:
-          _captureDone();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('这是一个 SnackBar 消息'),
-            ),
-          );
-          break;
-      }
+    _editor.addOnInfoListener((FkResult result) {
+      _showInfo(result);
     });
-    _editor.addOnTipListener((int code, String msg, bool isError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('这是一个 SnackBar 消息'),
-        ),
-      );
+    _editor.addOnTipListener((FkResult result) {
+      _showTip(result);
     });
     _openCamera();
   }
