@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fk_flutter/ui/camera_sheet_top.dart';
 import 'package:fk_flutter/utils/logcat.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -135,7 +136,7 @@ class _CameraShotPageState extends State<CameraShotPage>
         ));
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 32, 16, 96),
+      padding: const EdgeInsets.fromLTRB(16, 38, 16, 96),
       child: Stack(
         children: [
           Align(
@@ -165,25 +166,10 @@ class _CameraShotPageState extends State<CameraShotPage>
                   iconSize: 40,
                 ),
               )),
-          widget.showCloseButton
-              ? Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    child: IconButton(
-                      onPressed: () {
-                        _editor.closeCamera();
-                        setState(() {
-                          __isCaptured = false;
-                        });
-                      },
-                      style: ButtonStyle(
-                          padding:
-                              WidgetStateProperty.all(const EdgeInsets.all(8))),
-                      icon: const Icon(Icons.close, color: Colors.white),
-                      iconSize: 40,
-                    ),
-                  ))
-              : Container(),
+          const Align(
+            alignment: Alignment.topLeft,
+            child: CameraSheetTop(),
+          ),
         ],
       ),
     );
