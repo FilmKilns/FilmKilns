@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fk_flutter/utils/logcat.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
-import 'package:fk_flutter/fk/entity/FkValue.dart';
 import 'package:fk_flutter/channels/media_editor_channel.dart';
 import 'package:fk_flutter/fk/entity/fk_result.dart';
 

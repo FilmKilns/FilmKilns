@@ -1,7 +1,6 @@
 import 'package:fk_flutter/utils/logcat.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:fk_flutter/fk/entity/FkImageLayer.pb.dart';
 import 'package:fk_flutter/utils/system_utils.dart';
 import 'package:fk_flutter/channels/media_editor_channel.dart';
 
@@ -14,7 +13,6 @@ class LayerListPage extends StatefulWidget {
 
 class _LayerListPageState extends State<LayerListPage> with WidgetsBindingObserver {
   final _editor = MediaEditorChannel();
-  List<FkImageLayer>? layers;
   static const double _ITEM_SIZE = 30;
   static const double _ITEM_TEXT_SIZE = 14;
   static const _MAIN_EDGE = EdgeInsets.fromLTRB(0, 6, 0, 6);
@@ -34,10 +32,10 @@ class _LayerListPageState extends State<LayerListPage> with WidgetsBindingObserv
     }
   }
 
-  Widget createItem(FkImageLayer layer) {
-    return Text("${layer.size.width}x${layer.size.height}",
-        style: const TextStyle(color: Colors.black, fontSize: _ITEM_TEXT_SIZE));
-  }
+  // Widget createItem(FkImageLayer layer) {
+  //   return Text("${layer.size.width}x${layer.size.height}",
+  //       style: const TextStyle(color: Colors.black, fontSize: _ITEM_TEXT_SIZE));
+  // }
 
   Widget wrapItem(Widget index, Widget icon, Widget info) {
     var mainRadius = BorderRadius.circular(_ITEM_SIZE / 2);
@@ -168,22 +166,23 @@ class _LayerListPageState extends State<LayerListPage> with WidgetsBindingObserv
 
   @override
   Widget build(BuildContext context) {
-    if (layers == null) {
-      return Container(
-        width: double.infinity,
-        color: Colors.black,
-      );
-    }
+    // if (layers == null) {
+    //   return Container(
+    //     width: double.infinity,
+    //     color: Colors.black,
+    //   );
+    // }
     const iconImage = Icon(Icons.image_outlined);
-    var widgets = layers
-        ?.map((layer) => wrapItem(
-            Text(
-              "${layer.id}",
-              style: const TextStyle(color: Colors.white, fontSize: _ITEM_TEXT_SIZE),
-            ),
-            iconImage,
-            createItem(layer)))
-        .toList();
+    var widgets = [Text("test")];
+    // var widgets = layers
+    //     ?.map((layer) => wrapItem(
+    //         Text(
+    //           "${layer.id}",
+    //           style: const TextStyle(color: Colors.white, fontSize: _ITEM_TEXT_SIZE),
+    //         ),
+    //         iconImage,
+    //         createItem(layer)))
+    //     .toList();
     return Container(
       child: Column(
         children: [
