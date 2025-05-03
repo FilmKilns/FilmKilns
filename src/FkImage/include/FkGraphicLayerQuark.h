@@ -92,6 +92,8 @@ protected:
 
     FkResult _onSetVisibility(const std::shared_ptr<FkProtocol> &p);
 
+    FkResult _onSetProperties(const std::shared_ptr<FkProtocol> &p);
+
 private:
     bool _isExistLayer(FkID id);
 

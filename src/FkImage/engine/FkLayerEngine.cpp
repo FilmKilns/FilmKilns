@@ -46,6 +46,7 @@
 #include "FkLayerSetVisibilityProto.h"
 #include "FkAnyCompo.h"
 #include "FkFileUtils.h"
+#include "FkLayerSetPropertiesProto.h"
 
 #define TAG "FkLayerEngine"
 
@@ -718,5 +719,20 @@ FkResult FkLayerEngine::_setVisibility(const std::shared_ptr<FkMessage> &msg) {
     auto proto = std::make_shared<FkLayerSetVisibilityProto>();
     proto->layerId = msg->arg1;
     proto->visibility = static_cast<kVisibility>(msg->arg2);
+    return client->with(molecule)->send(proto);
+}
+
+FkResult FkLayerEngine::setLayerProperties(FkID layerId,
+                                           const std::unordered_map<std::string, FkValue> &properties) {
+    auto msg = FkMessage::obtain(FK_WRAP_FUNC(FkLayerEngine::_setLayerProperties));
+    auto proto = std::make_shared<FkLayerSetPropertiesProto>();
+    proto->layerId = layerId;
+    proto->properties = properties;
+    msg->sp = proto;
+    return sendMessage(msg);
+}
+
+FkResult FkLayerEngine::_setLayerProperties(const std::shared_ptr<FkMessage> &msg) {
+    FK_CAST_NULLABLE_PTR_RETURN_INT(proto, FkLayerSetPropertiesProto, msg->sp);
     return client->with(molecule)->send(proto);
 }

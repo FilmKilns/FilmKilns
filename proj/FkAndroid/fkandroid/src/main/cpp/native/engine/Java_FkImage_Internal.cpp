@@ -69,6 +69,10 @@ namespace Java_FkImage {
         return (jint)nativeSetCanvasSize(env, cls, handle, width, height);
     }
 
+    jint _nativeSetLayerProperties(JNIEnv *env, jclass cls, jlong handle, jint layerId, jbyteArray propertiesData) {
+        return (jint)nativeSetLayerProperties(env, cls, handle, layerId, FkJBuffer::create(env, propertiesData));
+    }
+
     jint _nativeRemoveLayer(JNIEnv *env, jclass cls, jlong handle, jint layerId) {
         return (jint)nativeRemoveLayer(env, cls, handle, layerId);
     }
@@ -125,7 +129,7 @@ namespace Java_FkImage {
 
     const char *CLASS_NAME = "com/alimin/fk/engine/FkImage";
 
-    const int METHODS_NUM = 22;
+    const int METHODS_NUM = 23;
 
     const JNINativeMethod METHODS[] = {
             {"nativeDrawPathFinish", "(JI)I", (void *) _nativeDrawPathFinish},
@@ -139,6 +143,7 @@ namespace Java_FkImage {
             {"nativePostTranslate", "(JIII)I", (void *) _nativePostTranslate},
             {"nativeNotifyRender", "(J)I", (void *) _nativeNotifyRender},
             {"nativeSetCanvasSize", "(JII)I", (void *) _nativeSetCanvasSize},
+            {"nativeSetLayerProperties", "(JI[B)I", (void *) _nativeSetLayerProperties},
             {"nativeRemoveLayer", "(JI)I", (void *) _nativeRemoveLayer},
             {"nativeSetProjectionLayer", "(JII)I", (void *) _nativeSetProjectionLayer},
             {"nativeNewLayerWithSource", "(JJ)I", (void *) _nativeNewLayerWithSource},

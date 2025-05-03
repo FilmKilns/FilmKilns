@@ -47,6 +47,8 @@ namespace Java_FkImage {
 
     int32_t nativeSetCanvasSize(JNIEnv *env, jclass cls, int64_t handle, int32_t width, int32_t height);
 
+    int32_t nativeSetLayerProperties(JNIEnv *env, jclass cls, int64_t handle, int32_t layerId, const std::shared_ptr<FkJBuffer> & propertiesData);
+
     int32_t nativeRemoveLayer(JNIEnv *env, jclass cls, int64_t handle, int32_t layerId);
 
     int32_t nativeSetProjectionLayer(JNIEnv *env, jclass cls, int64_t handle, int32_t layerId, int32_t srcLayerId);
@@ -102,6 +104,8 @@ namespace Java_FkImage {
 
     jint _nativeSetCanvasSize(JNIEnv *env, jclass cls, jlong handle, jint width, jint height);
 
+    jint _nativeSetLayerProperties(JNIEnv *env, jclass cls, jlong handle, jint layerId, jbyteArray propertiesData);
+
     jint _nativeRemoveLayer(JNIEnv *env, jclass cls, jlong handle, jint layerId);
 
     jint _nativeSetProjectionLayer(JNIEnv *env, jclass cls, jlong handle, jint layerId, jint srcLayerId);
@@ -136,6 +140,6 @@ namespace Java_FkImage {
 
     extern const int METHODS_NUM;
 
-    extern const JNINativeMethod METHODS[22];
+    extern const JNINativeMethod METHODS[23];
 
 };

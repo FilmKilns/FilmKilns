@@ -102,6 +102,8 @@ public:
 
     FkResult setVisibility(FkID layerId, kVisibility visibility);
 
+    FkResult setLayerProperties(FkID layerId, const std::unordered_map<std::string, FkValue> &properties);
+
 protected:
     std::shared_ptr<FkSessionClient> getClient() { return client; };
 
@@ -165,6 +167,8 @@ private:
     FkResult _setBackgroundColor(const std::shared_ptr<FkMessage> &msg);
 
     FkResult _setVisibility(const std::shared_ptr<FkMessage> &msg);
+
+    FkResult _setLayerProperties(const std::shared_ptr<FkMessage> &msg);
 
 private:
     static const FkID MSG_NOTIFY_RENDER;

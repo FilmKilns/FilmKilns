@@ -51,6 +51,7 @@
 #include "FkAddPluginProto.h"
 #include "FkPluginCompo.h"
 #include "FkLayerSetVisibilityProto.h"
+#include "FkLayerSetPropertiesProto.h"
 #include <cmath>
 
 FK_IMPL_CLASS_TYPE(FkGraphicLayerQuark, FkQuark)
@@ -91,6 +92,7 @@ void FkGraphicLayerQuark::describeProtocols(std::shared_ptr<FkPortDesc> desc) {
     FK_PORT_DESC_QUICK_ADD(desc, FkAddPluginProto, FkGraphicLayerQuark::_onUpdateLayerWithPlugin);
     FK_PORT_DESC_QUICK_ADD(desc, FkLayerSetBackgroundColorProto, FkGraphicLayerQuark::_onSetBackgroundColor);
     FK_PORT_DESC_QUICK_ADD(desc, FkLayerSetVisibilityProto, FkGraphicLayerQuark::_onSetVisibility);
+    FK_PORT_DESC_QUICK_ADD(desc, FkLayerSetPropertiesProto, FkGraphicLayerQuark::_onSetProperties);
 }
 
 FkResult FkGraphicLayerQuark::onCreate() {
@@ -684,6 +686,21 @@ FkResult FkGraphicLayerQuark::_onSetVisibility(const std::shared_ptr<FkProtocol>
     auto layer = _findLayer(proto->layerId);
     if (layer) {
         layer->visibility = proto->visibility;
+    }
+    return FK_OK;
+}
+
+FkResult FkGraphicLayerQuark::_onSetProperties(const std::shared_ptr<FkProtocol> &p) {
+    FK_CAST_NULLABLE_PTR_RETURN_INT(proto, FkLayerSetPropertiesProto, p);
+    auto layer = _findLayer(proto->layerId);
+    if (layer && !proto->properties.empty()) {
+        for (auto &itr : proto->properties) {
+            if (itr.first == "ZIndex") {
+                layer->zIndex = itr.second.getInt32();
+            } else if (itr.first == "Visibility") {
+                layer->visibility = static_cast<kVisibility>(itr.second.getInt32());
+            }
+        }
     }
     return FK_OK;
 }

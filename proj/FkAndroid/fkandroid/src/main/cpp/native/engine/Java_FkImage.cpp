@@ -17,6 +17,7 @@
 #include "FkJavaRuntime.h"
 #include "FkJniGlobalRef.h"
 #include "FkSurfaceTextureSource.h"
+#include "FkValueMap.pb.h"
 
 #define RENDER_ALIAS "RenderEngine"
 #define IMAGE_ENGINE_ALIAS "ImageEngine"
@@ -124,6 +125,24 @@ namespace Java_FkImage {
         auto engine = castHandle(handle);
         Fk_CHECK_NULL(engine);
         return engine->setCanvasSize(FkSize(width, height));
+    }
+
+    int32_t nativeSetLayerProperties(JNIEnv *env, jclass cls, int64_t handle, int32_t layerId, const std::shared_ptr<FkJBuffer> & propertiesData) {
+        auto engine = castHandle(handle);
+        Fk_CHECK_NULL(engine);
+        auto buf = propertiesData->cVal();
+        auto map = com::alimin::fk::pb::FkValueMap();
+        if (!map.ParseFromArray(buf->data(), buf->capacity())) {
+            return FK_INVALID_DATA;
+        }
+        std::unordered_map<std::string, FkValue> properties;
+        for (auto &itr : map.value()) {
+            properties.insert(std::make_pair(itr.first,
+                                         FkValue(itr.second.int32val(), itr.second.int64val(),
+                                                 itr.second.floatval(), itr.second.doubleval(),
+                                                 itr.second.strval())));
+        }
+        return engine->setLayerProperties(layerId, properties);
     }
 
     int32_t nativeRemoveLayer(JNIEnv *env, jclass cls, int64_t handle, int32_t layerId) {

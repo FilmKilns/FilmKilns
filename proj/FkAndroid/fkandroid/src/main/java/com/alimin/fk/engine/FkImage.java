@@ -14,7 +14,11 @@ import com.alimin.fk.core.FkPaint;
 import com.alimin.fk.define.kScaleType;
 import com.alimin.fk.entity.FkResult;
 import com.alimin.fk.listener.FkNativeMsgListener;
+import com.alimin.fk.pb.FkPbValueOuterClass;
+import com.alimin.fk.pb.FkValueMapOuterClass;
 import com.filmkilns.annotation.FkNativeAuto;
+
+import java.util.Map;
 
 import kotlin.jvm.functions.Function1;
 
@@ -116,6 +120,24 @@ public class FkImage extends FkEngine {
         return withInt(handle -> nativeRemoveLayer(handle, layerId));
     }
 
+    public FkResult setLayerProperties(int layerId, Map<String, Object> properties) {
+        FkValueMapOuterClass.FkValueMap.Builder builder = FkValueMapOuterClass.FkValueMap.newBuilder();
+        for (Map.Entry<String, Object> e : properties.entrySet()) {
+            if (e.getValue() instanceof Integer) {
+                builder.putValue(e.getKey(), FkPbValueOuterClass.FkPbValue.newBuilder().setInt32Val((int) e.getValue()).build());
+            } else if (e.getValue() instanceof Long) {
+                builder.putValue(e.getKey(), FkPbValueOuterClass.FkPbValue.newBuilder().setInt64Val((long) e.getValue()).build());
+            } else if (e.getValue() instanceof Float) {
+                builder.putValue(e.getKey(), FkPbValueOuterClass.FkPbValue.newBuilder().setFloatVal((float) e.getValue()).build());
+            } else if (e.getValue() instanceof Double) {
+                builder.putValue(e.getKey(), FkPbValueOuterClass.FkPbValue.newBuilder().setDoubleVal((double) e.getValue()).build());
+            } else if (e.getValue() instanceof String) {
+                builder.putValue(e.getKey(), FkPbValueOuterClass.FkPbValue.newBuilder().setStrVal((String) e.getValue()).build());
+            }
+        }
+        return withInt(handle -> nativeSetLayerProperties(handle, layerId, builder.build().toByteArray()));
+    }
+
     //    private var lastTime = 0L
     public FkResult notifyRender() {
         return withInt(new Function1<Long, Integer>() {
@@ -215,6 +237,8 @@ public class FkImage extends FkEngine {
     private native int nativeSetProjectionLayer(long handle, int layerId, int srcLayerId);
 
     private native int nativeRemoveLayer(long handle, int layerId);
+
+    private native int nativeSetLayerProperties(long handle, int layerId, byte[] propertiesData);
 
     private native int nativeSetCanvasSize(long handle, int width, int height);
 
