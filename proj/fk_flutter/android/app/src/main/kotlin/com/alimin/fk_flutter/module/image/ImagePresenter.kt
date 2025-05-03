@@ -311,10 +311,10 @@ class ImagePresenter(
     override fun getPaint(): FkPaint = paint
 
     override fun openCamera() {
+        clearCaptureLayer()
         if (camera != null) {
             return
         }
-        clearCaptureLayer()
         cameraManager = view.getContext().getSystemService(Context.CAMERA_SERVICE) as CameraManager
         camera = FkCamera2(cameraManager!!)
         camera?.addOnInfoListener(this)
