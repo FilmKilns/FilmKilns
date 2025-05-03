@@ -380,7 +380,12 @@ class ImagePresenter(
         }
     }
 
-    override fun takePicture() {
+    override fun takePicture(keepPreview: Boolean) {
+        if (keepPreview) {
+            camera?.activateFeatures(arrayOf(FkCameraFeatureKey.KEEP_PREVIEW_AFTER_CAPTURED_ON))
+        } else {
+            camera?.activateFeatures(arrayOf(FkCameraFeatureKey.KEEP_PREVIEW_AFTER_CAPTURED_OFF))
+        }
         camera?.takePicture(object : OnCaptureListener {
             override fun onResult(source: FkAbsImageSource?) {
                 if (source == null) {
@@ -391,7 +396,12 @@ class ImagePresenter(
                     if (captureLayer > 0) {
                         notifyLayers()
                     }
-                    closeCamera()
+                    if (!keepPreview) {
+                        closeCamera()
+                    } else {
+                        val properties = mapOf("ZIndex" to 0, "Visibility" to 2)
+                        engine.setLayerProperties(captureLayer, properties)
+                    }
                     view.onPresenterInfo(FkResult.INFO_CAMERA_TAKE_PICTURE_SUCCESS)
                 }
             }
@@ -400,7 +410,7 @@ class ImagePresenter(
 
     override fun activateFeatures(feats: Array<FkCameraFeatureKey>): FkResult {
         camera?.let {
-            return it.activateFeatures(feats);
+            return it.activateFeatures(feats)
         }
         return FkResult.FAIL
     }

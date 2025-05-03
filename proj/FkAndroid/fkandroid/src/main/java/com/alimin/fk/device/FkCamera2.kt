@@ -154,11 +154,13 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
                 result: TotalCaptureResult
             ) {
                 val metadata = FkCaptureMetadata(result)
-                FkLogcat.i(TAG, "onCaptureCompleted capture: ${metadata}")
+                showCaptureInfo("Capture info", metadata)
             }
         }
         try {
-            captureSession?.stopRepeating()
+            if (FkCaptureReqUtils.containsFeatureKey(curFeatures, cameraSettings, FkCameraFeatureKey.KEEP_PREVIEW_AFTER_CAPTURED_OFF)) {
+                captureSession?.stopRepeating()
+            }
             val fpsRange = curFeatures!!.getMaxDiffFpsRange()
             val template = CameraDevice.TEMPLATE_STILL_CAPTURE
             val request = cameraDevice!!.createCaptureRequest(template).apply {
@@ -223,10 +225,14 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
             if (it == FkCameraFeatureKey.FLASH_OFF
                 || it == FkCameraFeatureKey.FLASH_AUTO
                 || it == FkCameraFeatureKey.FLASH_ON
+                || it == FkCameraFeatureKey.KEEP_PREVIEW_AFTER_CAPTURED_ON
+                || it == FkCameraFeatureKey.KEEP_PREVIEW_AFTER_CAPTURED_OFF
             ) {
                 cameraSettings.reqFeatures.remove(FkCameraFeatureKey.FLASH_OFF)
                 cameraSettings.reqFeatures.remove(FkCameraFeatureKey.FLASH_AUTO)
                 cameraSettings.reqFeatures.remove(FkCameraFeatureKey.FLASH_ON)
+                cameraSettings.reqFeatures.remove(FkCameraFeatureKey.KEEP_PREVIEW_AFTER_CAPTURED_ON)
+                cameraSettings.reqFeatures.remove(FkCameraFeatureKey.KEEP_PREVIEW_AFTER_CAPTURED_OFF)
             }
             cameraSettings.reqFeatures.add(it)
             sb.append(it.desc)
@@ -426,6 +432,10 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
         dispatchInfo(FkResult.INFO_CAMERA_FILL_ALL_FEATURES_FINISH, 0, getFeatures())
     }
 
+    private fun showCaptureInfo(msg: String, metadata: FkCaptureMetadata) {
+//        FkLogcat.d(TAG, "${msg}: $metadata")
+    }
+
     private val previewCaptureCallback = object : FkAbsCameraSession.CaptureCallback {
         override fun onCaptureCompleted(
             session: FkAbsCameraSession,
@@ -436,8 +446,9 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
             if (curExpMetadata == null) {
                 curExpMetadata = FkCaptureMetadata(result)
             }
-//            FkLogcat.d(TAG, "onCaptureCompleted preview: ${latestPrevMetadata!!.ISO}, ${latestPrevMetadata!!.exposureTime}")
             _fillFeatures()
+            curExpMetadata?.let { showCaptureInfo("Preview info", it) }
+//            FkLogcat.d(TAG, "onCaptureCompleted preview: ${latestPrevMetadata!!.ISO}, ${latestPrevMetadata!!.exposureTime}")
         }
     }
 

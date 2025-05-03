@@ -1,5 +1,6 @@
 package com.alimin.fk.utils
 
+import android.graphics.ImageFormat
 import android.hardware.camera2.CaptureRequest
 import android.hardware.camera2.CaptureResult
 import android.hardware.camera2.TotalCaptureResult
@@ -252,6 +253,31 @@ class FkCaptureReqUtils {
             } else if (containsFeatureKey(features, settings, FkCameraFeatureKey.FLASH_ON)) {
                 withFlashMode(builder, FkCameraFeatureKey.FLASH_ON)
             }
+        }
+
+        fun getFormatStr(format: Int): String {
+            when (format) {
+                ImageFormat.RGB_565 -> return "RGB_565"
+                ImageFormat.NV16 -> return "NV16"
+                ImageFormat.YUY2 -> return "YUY2"
+                ImageFormat.YV12 -> return "YV12"
+                ImageFormat.Y8 -> return "Y8"
+                /*ImageFormat.Y16, */ImageFormat.DEPTH16 -> return "DEPTH16"
+                ImageFormat.NV21 -> return "NV21"
+                ImageFormat.YUV_420_888 -> return "YUV_420_888"
+                ImageFormat.YUV_422_888 -> return "YUV_422_888"
+                ImageFormat.YUV_444_888 -> return "YUV_444_888"
+                ImageFormat.FLEX_RGB_888 -> return "FLEX_RGB_888"
+                ImageFormat.FLEX_RGBA_8888 -> return "FLEX_RGBA_8888"
+                /*ImageFormat.RAW_DEPTH, */ImageFormat.RAW_SENSOR -> return "RAW_SENSOR"
+                ImageFormat.YCBCR_P010 -> return "YCBCR_P010"
+                /*ImageFormat.RAW_DEPTH10, */ImageFormat.RAW10 -> return "RAW10"
+                ImageFormat.RAW12 -> return "RAW12"
+                ImageFormat.JPEG -> return "JPEG"
+                ImageFormat.JPEG_R -> return "JPEG_R"
+                ImageFormat.DEPTH_JPEG -> return "DEPTH_JPEG"
+            }
+            return "Unknown"
         }
     }
 }

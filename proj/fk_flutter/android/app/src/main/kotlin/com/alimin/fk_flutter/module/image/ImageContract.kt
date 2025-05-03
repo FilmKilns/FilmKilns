@@ -60,7 +60,7 @@ class ImageContract {
         abstract fun openCamera()
         abstract fun closeCamera()
         abstract fun switchCamera()
-        abstract fun takePicture()
+        abstract fun takePicture(keepPreview: Boolean = false)
         abstract fun activateFeatures(feats: Array<FkCameraFeatureKey>): FkResult
         abstract fun testAction()
     }

@@ -112,6 +112,7 @@ class FkCameraFeatures(val id: String, cc: CameraCharacteristics, ccExt: CameraE
         _addAvailableKey(FkCameraFeatureKey.AE_MODE_ISO_FIRST)
         _addAvailableKey(FkCameraFeatureKey.AE_MODE_TIME_FIRST)
         _addAvailableKey(FkCameraFeatureKey.FLASH_OFF)
+        _addAvailableKey(FkCameraFeatureKey.KEEP_PREVIEW_AFTER_CAPTURED_OFF)
         if (cc.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true) {
             _addAvailableKey(FkCameraFeatureKey.FLASH_ON)
             _addAvailableKey(FkCameraFeatureKey.FLASH_AUTO)

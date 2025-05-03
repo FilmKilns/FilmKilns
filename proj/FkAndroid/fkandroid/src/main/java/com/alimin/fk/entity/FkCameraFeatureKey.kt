@@ -20,6 +20,8 @@ open class FkCameraFeatureKey(val key: Int, val desc: String) {
         val FLASH_OFF = FkCameraFeatureKey(0x20, "Flash off")
         val FLASH_ON = FkCameraFeatureKey(0x21, "Flash on")
         val FLASH_AUTO = FkCameraFeatureKey(0x22, "Flash auto")
+        val KEEP_PREVIEW_AFTER_CAPTURED_OFF = FkCameraFeatureKey(0x23, "Keep preview off")
+        val KEEP_PREVIEW_AFTER_CAPTURED_ON = FkCameraFeatureKey(0x24, "Keep preview on")
     }
 
     override fun equals(other: Any?): Boolean {
