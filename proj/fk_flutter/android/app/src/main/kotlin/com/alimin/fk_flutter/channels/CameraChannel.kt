@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import com.alimin.fk.entity.FkCameraFeatureKey
 import com.alimin.fk.entity.FkResult
 import com.alimin.fk.source.FkBitmapSource
 import com.alimin.fk.utils.FkLogcat
@@ -106,7 +107,16 @@ class CameraChannel(
 //                runOnUiThread { expValue?.let { camera?.updateExposure(expValue) } }
                 return
             }
-
+            "setFlashMode" -> {
+                val mode = arguments["mode"] as Int?
+                mode?.let {
+                    when (mode) {
+                        1 -> presenter.activateFeatures(arrayOf(FkCameraFeatureKey.FLASH_AUTO))
+                        2 -> presenter.activateFeatures(arrayOf(FkCameraFeatureKey.FLASH_ON))
+                        else -> presenter.activateFeatures(arrayOf(FkCameraFeatureKey.FLASH_OFF))
+                    }
+                }
+            }
             "reqTest" -> {
                 val handle = arguments["handle"] as Int
                 val path =

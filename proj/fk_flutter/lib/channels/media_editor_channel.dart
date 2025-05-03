@@ -82,6 +82,10 @@ class MediaEditorChannel {
     return _invokeMethod("capture", null);
   }
 
+  Future<int> setFlashMode(int mode) async {
+    return _invokeMethod("setFlashMode", null, {"mode": mode});
+  }
+
   Future<int> reqTest(Pointer<Void> handle) async {
     return _invokeMethod("reqTest", handle);
   }

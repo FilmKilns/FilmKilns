@@ -166,9 +166,9 @@ class _CameraShotPageState extends State<CameraShotPage>
                   iconSize: 40,
                 ),
               )),
-          const Align(
+          Align(
             alignment: Alignment.topLeft,
-            child: CameraSheetTop(),
+            child: CameraSheetTop(_editor),
           ),
         ],
       ),
