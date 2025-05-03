@@ -180,6 +180,7 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
                 FkCaptureReqUtils.withFaceAE(this, metadata, previewSize)
                 FkCaptureReqUtils.withHighQuality(this)
                 FkCaptureReqUtils.withFpsRange(this, fpsRange)
+                FkCaptureReqUtils.withRequests(this, curFeatures, cameraSettings)
             }
             captureSession?.capture(request.build(), callback, handler)
         } catch (e: Exception) {
@@ -214,6 +215,25 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
             return 0
         }
         return -1
+    }
+
+    override fun activateFeatures(feats: Array<FkCameraFeatureKey>): FkResult {
+        val sb = StringBuilder("activateFeatures: ")
+        feats.forEach {
+            if (it == FkCameraFeatureKey.FLASH_OFF
+                || it == FkCameraFeatureKey.FLASH_AUTO
+                || it == FkCameraFeatureKey.FLASH_ON
+            ) {
+                cameraSettings.reqFeatures.remove(FkCameraFeatureKey.FLASH_OFF)
+                cameraSettings.reqFeatures.remove(FkCameraFeatureKey.FLASH_AUTO)
+                cameraSettings.reqFeatures.remove(FkCameraFeatureKey.FLASH_ON)
+            }
+            cameraSettings.reqFeatures.add(it)
+            sb.append(it.desc)
+            sb.append(", ")
+        }
+        FkLogcat.i(TAG, sb.toString())
+        return FkResult.FAIL
     }
 
     private fun closeCaptureSession() {

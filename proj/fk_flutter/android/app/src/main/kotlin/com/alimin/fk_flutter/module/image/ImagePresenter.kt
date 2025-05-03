@@ -400,6 +400,13 @@ class ImagePresenter(
         })
     }
 
+    override fun activateFeatures(feats: Array<FkCameraFeatureKey>): FkResult {
+        camera?.let {
+            return it.activateFeatures(feats);
+        }
+        return FkResult.FAIL
+    }
+
     override fun onInfo(what: Int, arg0: Int, arg1: Any?, msg: String) {
         when (what) {
             FkResult.INFO_CAMERA_PREVIEW_SIZE_SELECTED.code -> arg1?.let {

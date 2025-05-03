@@ -12,40 +12,7 @@ import android.util.Range
 import android.util.Size
 import android.view.Surface
 import com.alimin.fk.utils.FkLogcat
-import java.util.HashMap
 import kotlin.math.abs
-
-data class FkCameraFeatureKey(val key: Int, val desc: String) {
-    companion object {
-        val SCENE_NIGHT_EXT = FkCameraFeatureKey(0x1, "Night extend scene")
-        val SCENE_HDR_EXT = FkCameraFeatureKey(0x2, "HDR extend scene")
-        val SCENE_BOKEH_EXT = FkCameraFeatureKey(0x3, "Person bokeh extend scene")
-        val SCENE_FACE_RETOUCH_EXT = FkCameraFeatureKey(0x4, "Face retouch extend scene")
-        val SCENE_AUTO_EXT = FkCameraFeatureKey(0x5, "Auto extend scene")
-        val SCENE_NIGHT_EXT_POST_VIEW = FkCameraFeatureKey(0x6, "Auto extend placeholder")
-        val SCENE_HDR_EXT_POST_VIEW = FkCameraFeatureKey(0x7, "HDR extend scene placeholder")
-        val SCENE_BOKEH_EXT_POST_VIEW = FkCameraFeatureKey(0x8, "Person bokeh extend scene placeholder")
-        val SCENE_FACE_RETOUCH_EXT_POST_VIEW = FkCameraFeatureKey(0x9, "Face retouch extend scene placeholder")
-        val SCENE_AUTO_EXT_POST_VIEW = FkCameraFeatureKey(0xA, "Auto extend scene placeholder")
-        val SCENE_CROP_RAW = FkCameraFeatureKey(0xB, "Crop raw")
-        val AE_MODE_AUTO = FkCameraFeatureKey(0x10, "Exposure auto")
-        val AE_MODE_OFF = FkCameraFeatureKey(0x11, "Exposure off")
-        val AE_MODE_ISO_FIRST = FkCameraFeatureKey(0x12, "Exposure auto iso first")
-        val AE_MODE_TIME_FIRST = FkCameraFeatureKey(0x13, "Exposure auto time first")
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return if (other is FkCameraFeatureKey) {
-            return other.key == key
-        } else {
-            return false
-        }
-    }
-
-    override fun hashCode(): Int {
-        return key
-    }
-}
 
 class FkCameraFeatures(val id: String, cc: CameraCharacteristics, ccExt: CameraExtensionCharacteristics?) {
     companion object {
@@ -136,14 +103,19 @@ class FkCameraFeatures(val id: String, cc: CameraCharacteristics, ccExt: CameraE
         this.maxFrameDuration = cc.get(CameraCharacteristics.SENSOR_INFO_MAX_FRAME_DURATION) ?: 0L
         this.maxAERegions = cc.get(CameraCharacteristics.CONTROL_MAX_REGIONS_AE) ?: 0
         this.maxAFRegions = cc.get(CameraCharacteristics.CONTROL_MAX_REGIONS_AF) ?: 0
-        _fillDefaultAvailableKeys()
+        _fillDefaultAvailableKeys(cc)
     }
 
-    private fun _fillDefaultAvailableKeys() {
+    private fun _fillDefaultAvailableKeys(cc: CameraCharacteristics) {
         _addAvailableKey(FkCameraFeatureKey.AE_MODE_AUTO)
         _addAvailableKey(FkCameraFeatureKey.AE_MODE_OFF)
         _addAvailableKey(FkCameraFeatureKey.AE_MODE_ISO_FIRST)
         _addAvailableKey(FkCameraFeatureKey.AE_MODE_TIME_FIRST)
+        _addAvailableKey(FkCameraFeatureKey.FLASH_OFF)
+        if (cc.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true) {
+            _addAvailableKey(FkCameraFeatureKey.FLASH_ON)
+            _addAvailableKey(FkCameraFeatureKey.FLASH_AUTO)
+        }
     }
 
     fun fill(cc: CameraCharacteristics, ccExt: CameraExtensionCharacteristics?) {
@@ -335,8 +307,9 @@ class FkCameraFeatures(val id: String, cc: CameraCharacteristics, ccExt: CameraE
     fun getAvailableKeysContent(): String {
         val sb = StringBuilder("[")
         availableKeys.forEach {
-            sb.append("${it.desc},")
+            sb.append("${it.desc}, ")
         }
+        sb.delete(sb.length - 2, sb.length)
         sb.append("]")
         return sb.toString()
     }

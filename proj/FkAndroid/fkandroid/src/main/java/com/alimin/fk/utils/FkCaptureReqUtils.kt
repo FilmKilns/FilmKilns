@@ -159,6 +159,26 @@ class FkCaptureReqUtils {
             }
         }
 
+        fun withFlashMode(
+            builder: CaptureRequest.Builder,
+            featureKey: FkCameraFeatureKey
+        ): CaptureRequest.Builder {
+            return builder.apply {
+                if (featureKey == FkCameraFeatureKey.FLASH_OFF) {
+                    set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON)
+                    set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF)
+                } else if (featureKey == FkCameraFeatureKey.FLASH_AUTO) {
+                    set(CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER, CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER_START)
+                    set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH)
+                    set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_SINGLE)
+                } else if (featureKey == FkCameraFeatureKey.FLASH_ON) {
+                    set(CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER, CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER_START)
+                    set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_ALWAYS_FLASH)
+                    set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_SINGLE)
+                }
+            }
+        }
+
         fun withHighQuality(builder: CaptureRequest.Builder): CaptureRequest.Builder {
             return builder.apply {
                 set(CaptureRequest.EDGE_MODE, CaptureRequest.EDGE_MODE_HIGH_QUALITY)
@@ -218,6 +238,20 @@ class FkCaptureReqUtils {
 
         fun containsFeatureKey(features: FkCameraFeatures?, settings: FkCameraSettings?, key: FkCameraFeatureKey): Boolean {
             return features?.contain(key) == true && settings?.reqFeatures?.contains(key) == true
+        }
+
+        fun withRequests(
+            builder: CaptureRequest.Builder,
+            features: FkCameraFeatures?,
+            settings: FkCameraSettings?
+        ) {
+            if (containsFeatureKey(features, settings, FkCameraFeatureKey.FLASH_OFF)) {
+                withFlashMode(builder, FkCameraFeatureKey.FLASH_OFF)
+            } else if (containsFeatureKey(features, settings, FkCameraFeatureKey.FLASH_AUTO)) {
+                withFlashMode(builder, FkCameraFeatureKey.FLASH_AUTO)
+            } else if (containsFeatureKey(features, settings, FkCameraFeatureKey.FLASH_ON)) {
+                withFlashMode(builder, FkCameraFeatureKey.FLASH_ON)
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.alimin.fk.device
 
 import com.alimin.fk.core.FkAbsImageSource
+import com.alimin.fk.entity.FkCameraFeatureKey
 import com.alimin.fk.entity.FkCameraFeatures
 import com.alimin.fk.entity.FkCameraSettings
 import com.alimin.fk.entity.FkResult
@@ -16,6 +17,7 @@ abstract class FkAbsCamera {
     abstract fun takePicture(listener: OnCaptureListener): Int
     abstract fun getFeatures(): List<FkCameraFeatures>
     abstract fun updateExposure(curExpValue: Int): Int
+    abstract fun activateFeatures(feats: Array<FkCameraFeatureKey>): FkResult
 
     open fun addOnInfoListener(listener: OnInfoListener) {
         synchronized(infoListeners) {

@@ -6,6 +6,7 @@ import android.util.Size
 import android.view.Surface
 import com.alimin.fk.core.FkAbsImageSource
 import com.alimin.fk.core.FkPaint
+import com.alimin.fk.entity.FkCameraFeatureKey
 import com.alimin.fk.entity.FkRational
 import com.alimin.fk.entity.FkResult
 import com.alimin.fk.listener.FkDoStatusListener
@@ -60,6 +61,7 @@ class ImageContract {
         abstract fun closeCamera()
         abstract fun switchCamera()
         abstract fun takePicture()
+        abstract fun activateFeatures(feats: Array<FkCameraFeatureKey>): FkResult
         abstract fun testAction()
     }
 }
