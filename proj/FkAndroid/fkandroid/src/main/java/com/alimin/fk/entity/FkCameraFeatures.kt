@@ -266,6 +266,10 @@ class FkCameraFeatures(val id: String, cc: CameraCharacteristics, ccExt: CameraE
         return map!!.isOutputSupportedFor(format)
     }
 
+    /**
+     * @param Long side
+     * @param Short side
+     */
     fun getBestSize(width: Int, height: Int, format: Any, flag: String): Size {
         val key = getSizeKey(format, flag)
         var delta = Int.MAX_VALUE

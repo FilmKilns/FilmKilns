@@ -50,7 +50,7 @@ class ImagePresenter(
     private var captureLayer = -1
     private var camera: FkAbsCamera? = null
     private var cameraManager: CameraManager? = null
-    private val cameraSettings: FkCameraSettings
+    private var cameraSettings: FkCameraSettings
 
     init {
         view.presenter = this
@@ -358,10 +358,8 @@ class ImagePresenter(
             val listener = object : OnInfoListener {
                 override fun onInfo(what: Int, arg0: Int, arg1: Any?, msg: String) {
                     it.removeOnInfoListener(this)
-                    cameraSettings.apply {
-                        facing =
-                            if (facing == FkCameraFeatures.kFacing.Back) FkCameraFeatures.kFacing.Front else FkCameraFeatures.kFacing.Back
-                    }
+                    val newFacing = if (cameraSettings.facing == FkCameraFeatures.kFacing.Back) FkCameraFeatures.kFacing.Front else FkCameraFeatures.kFacing.Back
+                    cameraSettings = cameraSettings.clone(newFacing)
                     val ret = it.start(cameraSettings)
                     if (ret == FkResult.OK.code) {
                         view.onPresenterInfo(FkResult.INFO_CAMERA_SWITCH_DONE)
