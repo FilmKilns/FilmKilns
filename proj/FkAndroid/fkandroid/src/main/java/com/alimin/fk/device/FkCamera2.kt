@@ -375,11 +375,11 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
         }
         pictureSize = yuvSize
         var format = ImageFormat.YUV_420_888
-        if (jpegSize.width * jpegSize.height > yuvSize.width * yuvSize.height) {
-            pictureSize = jpegSize
-            format = ImageFormat.JPEG
-        }
-        FkLogcat.i(TAG, "Picture size ${cameraSettings.pictureSize.width}x${cameraSettings.pictureSize.height} -> ${pictureSize.width}x${pictureSize.height}, format=$format")
+//        if (jpegSize.width * jpegSize.height > yuvSize.width * yuvSize.height) {
+//            pictureSize = jpegSize
+//            format = ImageFormat.JPEG
+//        }
+        FkLogcat.i(TAG, "Picture size ${cameraSettings.pictureSize.width}x${cameraSettings.pictureSize.height} -> ${pictureSize.width}x${pictureSize.height}, format=${FkCaptureReqUtils.getFormatStr(format)}")
         dispatchInfo(FkResult.INFO_CAMERA_PICTURE_SIZE_SELECTED, 0, Size(pictureSize.height, pictureSize.width))
         val reader = ImageReader.newInstance(
             pictureSize.width,
@@ -390,9 +390,8 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
             setOnImageAvailableListener({ reader ->
                 val image = reader.acquireNextImage()
                 if (image != null) {
-                    val format = image.format
                     val timestamp = image.timestamp
-                    FkLogcat.i(TAG, "Get picture ${image.width}x${image.height}, format=${format}, timestamp=${timestamp}")
+                    FkLogcat.i(TAG, "Get picture ${image.width}x${image.height}, format=${image.format}, timestamp=${timestamp}")
                     val source = createImageSource(reader, image)
                     image.close()
                     mainHandler.post { captureListenerQueue.poll()?.onResult(source) }
