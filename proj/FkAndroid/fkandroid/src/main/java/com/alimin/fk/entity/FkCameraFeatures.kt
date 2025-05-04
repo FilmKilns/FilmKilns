@@ -58,19 +58,24 @@ class FkCameraFeatures(val id: String, cc: CameraCharacteristics, ccExt: CameraE
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             ccExt?.let {
                 val func: (format: Any) -> Array<Size> = { format: Any ->
-                    if (format is Int) {
-                        it.getExtensionSupportedSizes(
-                            CameraExtensionCharacteristics.EXTENSION_AUTOMATIC,
-                            format
-                        ).toTypedArray()
-                    } else if (format is Class<*>) {
-                        it.getExtensionSupportedSizes(
-                            CameraExtensionCharacteristics.EXTENSION_AUTOMATIC,
-                            format
-                        ).toTypedArray()
-                    } else {
-                        emptyArray()
+                    try {
+                        if (format is Int) {
+                            it.getExtensionSupportedSizes(
+                                CameraExtensionCharacteristics.EXTENSION_AUTOMATIC,
+                                format
+                            ).toTypedArray()
+                        } else if (format is Class<*>) {
+                            it.getExtensionSupportedSizes(
+                                CameraExtensionCharacteristics.EXTENSION_AUTOMATIC,
+                                format
+                            ).toTypedArray()
+                        } else {
+                            emptyArray()
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
+                    emptyArray()
                 }
                 addSizes(SurfaceTexture::class.java, func, "ext")
                 addSizes(Surface::class.java, func, "ext")
@@ -228,25 +233,30 @@ class FkCameraFeatures(val id: String, cc: CameraCharacteristics, ccExt: CameraE
     }
 
     private fun getOutputSizesFunc(format: Any): Array<Size> {
-        return if (format is Int && map!!.isOutputSupportedFor(format)) {
-            map!!.getOutputSizes(format)
+        val result: Array<Size>? = if (format is Int && map?.isOutputSupportedFor(format) == true) {
+            map?.getOutputSizes(format)
         } else if (format is Class<*>) {
-            map!!.getOutputSizes(format)
+            map?.getOutputSizes(format)
         } else {
             return emptyArray()
         }
+        return result ?: emptyArray()
     }
 
     private fun addSizes(format: Any, func: (format: Any) -> Array<Size>, flag: String = "") {
         val key = getSizeKey(format, flag)
-        if (format is Int && map!!.isOutputSupportedFor(format)) {
-            val sizes: Array<Size> = func(format)
-            sizeMap[key] = sizes.asList()
-            FkLogcat.i(TAG,  "format=${format}: ${sizes.contentToString()}")
+        if (format is Int) {
+            if (map!!.isOutputSupportedFor(format)) {
+                val sizes = func(format)
+                if (sizes.isNotEmpty()) {
+                    sizeMap[key] = sizes.asList()
+                    FkLogcat.i(TAG,  "format=${format}: ${sizes.contentToString()}")
+                }
+            }
         } else {
             if (StreamConfigurationMap.isOutputSupportedFor(format as Class<*>)) {
                 val sizes = func(format)
-                if (sizes != null) {
+                if (sizes.isNotEmpty()) {
                     sizeMap[key] = sizes.asList()
                     FkLogcat.i(TAG, "format=$key: ${sizes.contentToString()}")
                 } else {
