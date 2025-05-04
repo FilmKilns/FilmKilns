@@ -54,7 +54,7 @@ public class FkSurfaceTextureSource extends FkAbsImageSource {
                     List<OnRenderListener> listeners = copyInfoListeners();
                     for (OnRenderListener l : listeners) {
                         if (l != null) {
-                            l.onRender();
+                            l.onRender(getTimestampInNS());
                         }
                     }
                 }

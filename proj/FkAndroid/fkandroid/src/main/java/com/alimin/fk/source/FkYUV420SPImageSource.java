@@ -21,8 +21,9 @@ public class FkYUV420SPImageSource extends FkAbsImageSource {
     private ByteBuffer u;
     private ByteBuffer v;
     private int orientation;
+    private long timestamp;
 
-    public FkYUV420SPImageSource(ByteBuffer y, ByteBuffer uv, Size size, int orientation) {
+    public FkYUV420SPImageSource(ByteBuffer y, ByteBuffer uv, Size size, int orientation, long timestamp) {
         super();
         FkLogcat.i(TAG, "Constructor");
         this.size = size;
@@ -30,9 +31,10 @@ public class FkYUV420SPImageSource extends FkAbsImageSource {
         this.u = uv;
         this.v = null;
         this.orientation = orientation;
+        this.timestamp = timestamp;
     }
 
-    public FkYUV420SPImageSource(ByteBuffer y, ByteBuffer u, ByteBuffer v, Size size, int orientation) {
+    public FkYUV420SPImageSource(ByteBuffer y, ByteBuffer u, ByteBuffer v, Size size, int orientation, long timestamp) {
         super();
         FkLogcat.i(TAG, "Constructor");
         this.size = size;
@@ -40,6 +42,7 @@ public class FkYUV420SPImageSource extends FkAbsImageSource {
         this.u = u;
         this.v = v;
         this.orientation = orientation;
+        this.timestamp = timestamp;
     }
 
     @Override
@@ -67,7 +70,7 @@ public class FkYUV420SPImageSource extends FkAbsImageSource {
 
     @Override
     public long getTimestampInNS() {
-        return System.currentTimeMillis() * 1000000;
+        return timestamp;
     }
 
     @Override

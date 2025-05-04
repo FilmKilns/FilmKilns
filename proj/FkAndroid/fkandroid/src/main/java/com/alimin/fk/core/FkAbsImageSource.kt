@@ -32,6 +32,6 @@ abstract class FkAbsImageSource : FkNativeObject() {
     interface OnRenderListener {
         fun onCreate()
         fun onDestroy()
-        fun onRender()
+        fun onRender(timestamp: Long)
     }
 }

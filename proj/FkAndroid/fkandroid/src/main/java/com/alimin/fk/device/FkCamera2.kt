@@ -343,13 +343,13 @@ class FkCamera2(private val manager: CameraManager) : FkAbsCamera() {
                 if (planes.size == 2 || (planes.size == 3 && planes[1].rowStride == image.width && planes[1].pixelStride == 2)) {
                     FkYUV420SPImageSource(
                         planes[0].buffer, planes[1].buffer,
-                        Size(image.width, image.height), orientation
+                        Size(image.width, image.height), orientation, image.timestamp
                     )
                 } else if (planes.size == 3) {
                     FkYUV420SPImageSource(
                         planes[0].buffer,
                         planes[1].buffer,
-                        planes[2].buffer, Size(image.width, image.height), orientation
+                        planes[2].buffer, Size(image.width, image.height), orientation, image.timestamp
                     )
                 } else {
                     null
