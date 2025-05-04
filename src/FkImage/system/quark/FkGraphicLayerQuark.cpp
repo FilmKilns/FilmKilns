@@ -645,7 +645,7 @@ FkResult FkGraphicLayerQuark::_onUpdateLayerWithSource(const std::shared_ptr<FkP
             layer->addComponent(std::make_shared<FkFilePathCompo>(proto->filePath));
         }
         FK_CAST_NULLABLE_PTR_RETURN_INT(proto0, FkGraphicUpdateLayerPrt, p);
-        _updateLayerSize(proto0, layer,proto->source->getSize(), true);
+        _updateLayerSize(proto0, layer, proto->source->getSize(), true);
 
         auto context = std::dynamic_pointer_cast<FkImageContext>(getContext());
         FkAssert(context != nullptr, FK_NPE);

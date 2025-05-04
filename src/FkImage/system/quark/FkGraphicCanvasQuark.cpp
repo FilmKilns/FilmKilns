@@ -53,7 +53,7 @@ void FkGraphicCanvasQuark::describeProtocols(std::shared_ptr<FkPortDesc> desc) {
     FK_PORT_DESC_QUICK_ADD(desc, FkUpdateLayerModelProto, FkGraphicCanvasQuark::_onDelivery);
     FK_PORT_DESC_QUICK_ADD(desc, FkLayerSetProjectionProto, FkGraphicCanvasQuark::_onDelivery);
     FK_PORT_DESC_QUICK_ADD(desc, FkCropLayerProto, FkGraphicCanvasQuark::_onDelivery);
-    FK_PORT_DESC_QUICK_ADD(desc, FkLayerSetSourceProto, FkGraphicCanvasQuark::_onDelivery);
+    FK_PORT_DESC_QUICK_ADD(desc, FkLayerSetSourceProto, FkGraphicCanvasQuark::_onQueryCanvasSize);
 
 }
 
@@ -156,6 +156,13 @@ FkResult FkGraphicCanvasQuark::_onSetRotate(std::shared_ptr<FkProtocol> p) {
 }
 
 FkResult FkGraphicCanvasQuark::_onQueryCanvasSize(std::shared_ptr<FkProtocol> &p) {
+    if (FK_INSTANCE_OF(p, FkLayerSetSourceProto)) {
+        auto proto = Fk_POINTER_CAST(FkLayerSetSourceProto, p);
+        if (proto) {
+            proto->winSize = _getCanvas()->getSize();
+        }
+        return FK_OK;
+    }
     FK_CAST_NULLABLE_PTR_RETURN_INT(proto, FkQuerySizeProto, p);
     auto compo = FK_FIND_COMPO(_getCanvas(), FkSizeCompo);
     if (compo) {
