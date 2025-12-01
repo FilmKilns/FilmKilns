@@ -19,11 +19,6 @@ bool FkThread::sleep(int64_t us) {
     return true;
 }
 
-long FkThread::currentThreadId() {
-//    return syscall(SYS_gettid);
-    return pthread_self();
-}
-
 long FkThread::currentThreadId(std::__thread_id id) {
     std::ostringstream oss;
     oss << id;

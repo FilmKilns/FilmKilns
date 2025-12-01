@@ -37,6 +37,8 @@ public:
 private:
     void run();
 
+    void _init();
+
 private:
     std::string name;
     std::thread mThread;

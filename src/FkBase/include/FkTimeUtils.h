@@ -9,6 +9,7 @@
 #define FK_BASE_FKTIMEUTILS_H
 
 #include "FkObject.h"
+#include <sys/time.h>
 
 class FkTimeUtils {
 public:

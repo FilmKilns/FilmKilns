@@ -22,5 +22,5 @@ FkFloatVec2::~FkFloatVec2() {
 }
 
 bool FkFloatVec2::isNan() {
-    return isnanf(x) || isnanf(y);
+    return isnan(x) || isnan(y);
 }

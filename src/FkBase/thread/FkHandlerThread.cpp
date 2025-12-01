@@ -7,7 +7,6 @@
 
 #include "FkHandlerThread.h"
 #include "FkThread.h"
-#include <sys/prctl.h>
 
 #define TAG "FkHandlerThread"
 
@@ -27,7 +26,7 @@ FkHandlerThread::FkHandlerThread(std::string name)
 }
 
 void FkHandlerThread::run() {
-    pthread_setname_np(mThread.native_handle(), name.c_str());
+    _init();
     auto id = FkThread::currentThreadId();
     FkLooper::prepare();
     FkLogI(TAG, "Run thread(%s: %ld) looper.", name.c_str(), id);

@@ -12,6 +12,7 @@
 #include "FkClassType.h"
 #include <functional>
 #include <inttypes.h>
+#include <stdlib.h>
 
 // +-------- Define --------+
 #define FK_INTERFACE class
